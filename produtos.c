@@ -29,7 +29,65 @@ void produtos() {
         switch(opcaoprod) {
             case 'C':
                 FILE *produtos = fopen("produtos.txt", "a+");
-                // lero lero etc e tal
+                struct Produto produto;
+                printf("\nDigite um ID para o produto (anote-o em algum lugar): ");
+                scanf("%d", &produto.id);
+                printf("\nDigite o nome do produto: ");
+                scanf(" %75[^\n]", produto.nome);
+                printf("\nDigite o preço do produto: ");
+                scanf("%f", &produto.preco);
+                fprintf("produtos", "%d|%s|%.2f\n", produto.id, produto.nome, produto.preco);
+                fclose(produtos);
+                printf("\nProduto cadastrado com sucesso!");
+                break;
+            case 'L':
+                FILE *produtos = fopen("produtos.txt", "a+");
+                struct Produto produto;
+                printf("\nLista de produtos");
+                while (fscanf(produtos, "%d|%75[^|]|%f\n", &produto.id, produto.nome, &produto.preco) != EOF) {
+                    printf("ID: %d, nome: %s, preço: %.2f\n", produto.id, produto.nome, produto.preco);
+                }
+                system("pause");
+                fclose(produtos);
+                break;
+            case 'E':
+                FILE *produtos = fopen("produtos.txt", "a+");
+
+                int idAlvo;
+                printf("\nDigite o ID do produto a ser editado: ");
+                scanf("%d", &idAlvo);
+                
+                struct Produto produto;
+                int encontrado = 0;
+                FILE *temp = fopen("temp.txt", "w");
+                while (fscanf(produtos, "%d|%75[^|]|%f\n", &produto.id, produto.nome, &produto.preco) != EOF) {
+                    if (produto.id == idAlvo) {
+                        printf("\nDigite o novo nome do produto (ou pressione Enter para não alterar): ");
+                        char novoNome[76];
+                        scanf( " %75[^\n]", novoNome);
+                        if (strlen(novoNome) > 0) {
+                            strcpy(produto.nome, novoNome);
+                        }
+                        printf("\nDigite o novo preço do produto (ou pressione Enter para não alterar): ");
+                        float novoPreco;
+                        scanf("%f", &novoPreco);
+                        if (novoPreco > 0) {
+                            produto.preco = novoPreco;
+                        }
+                        encontrado = 1;
+                    }
+                    fprintf(temp, "%d|%s|%.2f\n", produto.id, produto.nome, produto.preco);
+                }
+                fclose(temp);
+                fclose(produtos);
+                remove("produtos.txt");
+                rename("temp.txt", "produtos.txt");
+                if (encontrado) {
+                    printf("\nProduto editado com sucesso!");
+                } else {
+                    printf("\nProduto não encontrado.");
+                }
+
         }
     } while (toupper(saidaprod) != 'S');
 }
