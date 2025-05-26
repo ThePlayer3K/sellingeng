@@ -12,6 +12,7 @@ struct Produto {
     float preco;
 };
 void produtos() {
+    setlocale(LC_ALL, "Portuguese");
     char saidaprod = 'n';
     do {
         system("cls");
