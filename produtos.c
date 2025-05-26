@@ -87,6 +87,45 @@ void produtos() {
                 } else {
                     printf("\nProduto não encontrado.");
                 }
+                break;
+            case 'X':
+                FILE *produtos = fopen("produtos.txt", "r");
+                int idAlvo;
+                printf("\nInforme o ID do produto a ser excluído:");
+                scanf("%d", &idAlvo);
+                struct Produto produto;
+                int encontrado = 0;
+                FILE *temp = fopen("temp.txt", "w");
+                while (fscanf(produtos, "%d|%75[^|]|%f\n", &produto.id, produto.nome, &produto.preco) != EOF) {
+                    if (produto.id == idAlvo) {
+                        printf("\n Deseja mesmo exlcluir o produto %s? (S/N): ", produto.nome);
+                        char confirmacao;
+                        scanf(" %c", &confirmacao);
+                        if (toupper(confirmacao) == 'S') {
+                            encontrado = 2;
+                        } else {
+                            encontrado = 1;
+                        }
+                    } else {
+                        fprintf(temp, "%d|%s|%.2f\n", produto.id, produto.nome, produto.preco);
+                    }
+                }
+                fclose(tempFile);
+                fclose(arquivo);
+                if (encontrado == 2) {
+                    remove("produtos.txt");
+                    rename("temp.txt", "produtos.txt");
+                    printf("\nProduto excluído com sucesso!");
+                } else if (encontrado == 1) {
+                    printf("\nProduto não excluído.");
+                } else {
+                    printf("\nProduto não encontrado.");
+                }
+                break;
+            case 'S':
+                saidaprod = 'S';
+            default:
+                printf("\nOpção inválida, tente novamente.");
 
         }
     } while (toupper(saidaprod) != 'S');
