@@ -6,6 +6,8 @@
 #include <math.h>
 #include <time.h>
 
+void produtos();
+
 int main(void){
     setlocale(LC_ALL, "Portuguese");
     system("chcp 1252 > nul");

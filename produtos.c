@@ -10,7 +10,7 @@ struct Produto {
     int id;
     char nome[76];
     float preco;
-}
+};
 void produtos() {
     char saidaprod = 'n';
     do {
@@ -27,7 +27,7 @@ void produtos() {
         scanf(" %c", &opcaoprod);
         opcaoprod = toupper(opcaoprod);
         switch(opcaoprod) {
-            case 'C':
+            case 'C': {
                 FILE *produtos = fopen("produtos.txt", "a+");
                 struct Produto produto;
                 printf("\nDigite um ID para o produto (anote-o em algum lugar): ");
@@ -36,11 +36,12 @@ void produtos() {
                 scanf(" %75[^\n]", produto.nome);
                 printf("\nDigite o preço do produto: ");
                 scanf("%f", &produto.preco);
-                fprintf("produtos", "%d|%s|%.2f\n", produto.id, produto.nome, produto.preco);
+                fprintf(produtos, "%d|%s|%.2f\n", produto.id, produto.nome, produto.preco);
                 fclose(produtos);
                 printf("\nProduto cadastrado com sucesso!");
                 break;
-            case 'L':
+            }
+            case 'L': {
                 FILE *produtos = fopen("produtos.txt", "a+");
                 struct Produto produto;
                 printf("\nLista de produtos");
@@ -50,7 +51,8 @@ void produtos() {
                 system("pause");
                 fclose(produtos);
                 break;
-            case 'E':
+            }
+            case 'E': {
                 FILE *produtos = fopen("produtos.txt", "a+");
 
                 int idAlvo;
@@ -88,7 +90,8 @@ void produtos() {
                     printf("\nProduto não encontrado.");
                 }
                 break;
-            case 'X':
+            }
+            case 'X': {
                 FILE *produtos = fopen("produtos.txt", "r");
                 int idAlvo;
                 printf("\nInforme o ID do produto a ser excluído:");
@@ -98,7 +101,7 @@ void produtos() {
                 FILE *temp = fopen("temp.txt", "w");
                 while (fscanf(produtos, "%d|%75[^|]|%f\n", &produto.id, produto.nome, &produto.preco) != EOF) {
                     if (produto.id == idAlvo) {
-                        printf("\n Deseja mesmo exlcluir o produto %s? (S/N): ", produto.nome);
+                        printf("\nDeseja mesmo exlcluir o produto %s? (S/N): ", produto.nome);
                         char confirmacao;
                         scanf(" %c", &confirmacao);
                         if (toupper(confirmacao) == 'S') {
@@ -110,8 +113,8 @@ void produtos() {
                         fprintf(temp, "%d|%s|%.2f\n", produto.id, produto.nome, produto.preco);
                     }
                 }
-                fclose(tempFile);
-                fclose(arquivo);
+                fclose(temp);
+                fclose(produtos);
                 if (encontrado == 2) {
                     remove("produtos.txt");
                     rename("temp.txt", "produtos.txt");
@@ -122,8 +125,10 @@ void produtos() {
                     printf("\nProduto não encontrado.");
                 }
                 break;
+            }
             case 'S':
                 saidaprod = 'S';
+                break;
             default:
                 printf("\nOpção inválida, tente novamente.");
 
