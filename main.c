@@ -22,7 +22,9 @@ int main(void){
         opcao = toupper(opcao);
         switch(opcao) {
             case 'P':
-                /*TODO*/
+                produtos();
+                system("clear");
+                system("cls");
                 break;
             case 'I':
                 /*TODO*/
