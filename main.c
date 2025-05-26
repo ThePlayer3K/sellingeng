@@ -18,6 +18,7 @@ int main(void){
         printf("\n(P) Cadastrar, atualizar ou remover produto");
         printf("\n(I) Iniciar dia de vendas");
         printf("\n(V) Visualizar dia de vendas anterior");
+        printf("\n(D) Gerenciar despesas periódicas");
         printf("\n(S) Sair");
         printf("\nSua opção: ");
         scanf(" %c", &opcao);
@@ -32,6 +33,9 @@ int main(void){
                 /*TODO*/
                 break;
             case 'V':
+                /*TODO*/
+                break;
+            case 'D':
                 /*TODO*/
                 break;
             case 'S':
