@@ -6,6 +6,7 @@
 #include <math.h>
 #include <time.h>
 
+
 void produtos();
 
 int main(void){
