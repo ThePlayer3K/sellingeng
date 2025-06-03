@@ -43,6 +43,7 @@ void motorVendas() {
         return;
     }
     printf("\nData atual: %s\nIniciando motor de vendas: %s\n", buffer);
+    strftime(buffer, sizeof(buffer), "%d%m%Y", timeinfo);
     FILE *relatoriovendas = fopen(strcat(buffer, ".txt"), "a+");
     char saida = 'n';
     do {
