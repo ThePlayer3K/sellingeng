@@ -8,6 +8,7 @@
 
 
 void produtos();
+void motorVendas();
 
 int main(void){
     setlocale(LC_ALL, "Portuguese");
@@ -27,11 +28,11 @@ int main(void){
         switch(opcao) {
             case 'P':
                 produtos();
-                system("clear");
                 system("cls");
                 break;
             case 'I':
-                /*TODO*/
+                motorVendas();
+                system("cls");
                 break;
             case 'V':
                 /*TODO*/
@@ -44,7 +45,6 @@ int main(void){
                 scanf(" %c", &saida);
                 break;
             default:
-                system("clear");
                 system("cls");
                 printf("\nOpção inválida, tente novamente");
         }
