@@ -12,6 +12,8 @@ typedef struct {
     float preco;
 } ItemDaVenda;
 
+char metpagamento[5] = {'$', 'C', 'D', 'P', 'A'};
+
 FILE *produtos = fopen("produtos.txt", "a+");
 
 float encontrarPreco(int id) {
@@ -53,8 +55,12 @@ void motorVendas() {
             do {
                 int idproduto, quantidade;
                 float precovenda;
-                printf("\nInsira o produto a ser vendido: ");
-                scanf("%d", &idproduto);
+                int erroproduto = 0;
+                do {
+                    printf("\nInsira o produto a ser vendido: ");
+                    erroproduto = scanf("%d", &idproduto);
+                    if (erroproduto != 1) printf("\nErro ao registar ID de produto. Tente novamente");
+                } while (erroproduto != 1);
                 struct Produto produto;
                 int encontrado = 0;
                 while (fscanf(produtos, "%d|%75[^|]|%f\n", &produto.id, produto.nome, &produto.preco) != EOF) {
@@ -77,6 +83,41 @@ void motorVendas() {
                 printf("\nDeseja continuar a venda? (S/N) ");
                 scanf(" %c", &continuarvenda);
             } while (toupper(continuarvenda) != 'N');
+            char metododavenda;
+            int erropagamento = 0;
+            do {
+                printf("\nSelecione um meio de pagamento usando um caractere: ");
+                printf("\n($) Dinheiro");
+                printf("\n(C) Crédito");
+                printf("\n(D) Débito");
+                printf("\n(A) Vale-Alimentação");
+                scanf(" %c", &metododavenda);
+                metododavenda = toupper(metododavenda);
+                for (int i = 0; i < 5; i++) {
+                    if (metododavenda == metpagamento[i]) erropagamento == 1;
+                }
+                if (erropagamento != 1) {
+                    printf("\nErro ao obter método de pagamento, tente novamente!");
+                    continue;
+                } else {
+                    printf("\nVocê tem certeza do método de pagamento? (S/N)");
+                    char confirmacaometodo;
+                    scanf(" %c", &confirmacaometodo);
+                    if (toupper(confirmacaometodo) != 'S') erropagamento = 0;
+                }
+            } while (erropagamento != 1);
+            for (int i = 0; i < contadorvetor; i++) {
+                fprintf(relatoriovendas, "%d|%d|%f|%c\n", ItemDaVenda[i].id, ItemDaVenda[i].quantidade, ItemDaVenda[i].preco, metododavenda);
+            }
+            printf("\nVenda registrada com sucesso!");
+            system("pause");
+            system("cls");   
+        } else {
+            printf("\nTem certeza que quer finalizar o dia de vendas? (S/N)? ");
+            scanf(" %c", &saida);
         }
-    } while (toupper(saida) != 'N');
+    } while (toupper(saida) != 'N' || contadorvetor <= 30);
+    printf("\nDia de vendas finalizado com sucesso! Você pode utilizar a função de visualizar relatórios de vendas diárias");
+    system("pause");
+    system("cls");
 }
