@@ -82,7 +82,8 @@ void motorVendas() {
                 }
                 printf("\nDeseja continuar a venda? (S/N) ");
                 scanf(" %c", &continuarvenda);
-            } while (toupper(continuarvenda) != 'N');
+            } while (toupper(continuarvenda) != 'N' || contadorvetor <= 30);
+            if (contadorvetor > 30) printf("\nLimite de itens por venda excedido!");
             char metododavenda;
             int erropagamento = 0;
             do {
@@ -116,7 +117,7 @@ void motorVendas() {
             printf("\nTem certeza que quer finalizar o dia de vendas? (S/N)? ");
             scanf(" %c", &saida);
         }
-    } while (toupper(saida) != 'N' || contadorvetor <= 30);
+    } while (toupper(saida) != 'N');
     printf("\nDia de vendas finalizado com sucesso! Você pode utilizar a função de visualizar relatórios de vendas diárias");
     system("pause");
     system("cls");
