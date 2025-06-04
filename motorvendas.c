@@ -60,11 +60,27 @@ void motorVendas() {
                 do {
                     printf("\nInsira o produto a ser vendido: ");
                     erroproduto = scanf("%d", &idproduto);
-                    if (erroproduto != 1) printf("\nErro ao registar ID de produto. Tente novamente");
+                    if (erroproduto != 1) {
+                        printf("\nErro ao registar ID de produto. Tente novamente");
+                    } else {
+                        char nomeproduto[76];
+                        while (fscanf(produtos, "%d|%75[^|]|%f\n", &produto.id, produto.nome, &produto.preco) != EOF) {
+                            if (idproduto == produto.id) {
+                                produto.nome = nomeproduto; 
+                            }
+                        }
+                        printf("\nO produto %s está correto? (S/N)", nomeproduto);
+                        char verificarproduto;
+                        erroproduto = scanf( "%c", &verificarproduto);
+                        if (toupper(verificarproduto) != 'S') {
+                            printf("\nProduto cancelado");
+                            erroproduto = 0;
+                        } else if (erroproduto != 1) printf("\nErro ao obter confirmação");
+                    }
                 } while (erroproduto != 1);
                 struct Produto produto;
                 int encontrado = 0;
-                while (fscanf(produtos, "%d|%75[^|]|%f\n", &produto.id, produto.nome, &produto.preco) != EOF) {
+                while (fscanf(produtos, "%d|%76[^|]|%f\n", &produto.id, produto.nome, &produto.preco) != EOF) {
                     if (idproduto == produto.id) {
                         encontrado == 1;
                     }
