@@ -29,6 +29,39 @@ struct Produtolistado {
     int quantidade;
 };
 
+int lerDia() {
+    int n = 0;
+    do {
+        scanf("%d");
+        if (n < 1 || n > 31) {
+            printf("\nDia inválido: tente novamente: ");
+        } 
+    } while (n < 1 || n > 31);
+    return n;
+}
+
+int lerMes() {
+    int n = 0;
+    do {
+        scanf("%d");
+        if (n < 1 || n > 12) {
+            printf("\nMês inválido: tente novamente: ");
+        } 
+    } while (n < 1 || n > 12);
+    return n;
+}
+
+int lerMes() {
+    int n = 10000;
+    do {
+        scanf("%d");
+        if (n > 9999) {
+            printf("\nAno inválido: tente novamente: ");
+        } 
+    } while (n > 9999);
+    return n;
+}
+
 int procurarArquivo(char[] nomearquivo) {
     char caminhoprograma[MAX_PATH];
     char caminhocompletoarquivo[MAX_PATH];
@@ -159,7 +192,38 @@ void Visualizar() {
                 system("pause");
                 break;
             case 'M':
-                
+                int diaI, mesI, anoI;
+                int diaF, mesF, anoF;
+                printf("\nTenha em mente as datas (dia, mês, ano) inicial e final do período que quer compreender as entradas do mês.");
+                printf("\nInsira o dia inicial: ");
+                diaI = lerDia();
+                printf("\nInsira o mês inicial: ");
+                mesI = lerMes();
+                printf("\nInsira o ano inicial: ");
+                anoI = lerAno();
+                printf("\nInsira o dia final: ");
+                diaII = lerDia();
+                printf("\nInsira o mês final: ");
+                mesII = lerMes();
+                printf("\nInsira o ano final: ");
+                anoII = lerAno();
+                struct tm data_atual = {0};
+                struct tm data_final = {0};
+                data_atual.tm_mday = diaI;
+                data_atual.tm_mon = mesI--;
+                data_atual.tm_year = anoI - 1900;
+                data_final.tm_mday = diaII;
+                data_final.tm_mon = mesII--;
+                data_final.tm_year = anoII - 1900;
+                char stringdatafinal[9];
+                strftime(stringdatafinal, sizeof(stringdatafinal), "%d%m%Y", &data_final);
+                int valordinheirototal = 0, valoralimentacaototal = 0, valorcreditototal = 0, valordebitototal = 0, valorpixtotal = 0;
+                int killswitch = 0;
+                while (killswitch != 1) {
+                    
+                }
+
+
         }
     } while (toupper(saida) != 'S');
 }
