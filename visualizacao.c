@@ -122,15 +122,16 @@ void Visualizar() {
         saida = toupper(saida);
         switch(saida) {
             case 'U':
-                char data[11];
+                char data[13];
                 int erroscan = 0, arquivoencontrado = 1;
                 do {
                     printf("\nInsira a data do arquivo mencionado (DDMMAAAA, tudo junto): ");
-                    erroscan = scanf(" %11[^\n]", data);
+                    erroscan = scanf(" %9[^\n]", data);
                     if (erroscan != 1) {
                         printf("\nErro ao ler data! ");
                         continue;
                     }
+                    strcat(data, ".txt");
                     int verificararquivo = procurarArquivo(data);
                     if (verificararquivo == 1) printf("\nArquivo com esta data não encontrado");
                 } while (erroscan != 1 && arquivoencontrado != 0);
@@ -189,6 +190,10 @@ void Visualizar() {
                 printf("\nValor crédito líquido: R$%.2f", creditoliquido);
                 printf("\nValor débito líquido: R$%.2f", debitoliquido);
                 printf("\nValor Pix líquido: R$%.2f", pixliquido);
+                float totalbruto = valordinheiro + valoralimentacao + valorcredito + valordebito + valorpix;
+                float totalliquido = valordinheiro + valoralimentacao + creditoliquido + debitoliquido + pixliquido;
+                printf("\nValor bruto total: R$%.2f", totalbruto);
+                printf("\nValor líquido total: R$.2f", totalliquido);
                 system("pause");
                 break;
             case 'M':
@@ -210,20 +215,78 @@ void Visualizar() {
                 struct tm data_atual = {0};
                 struct tm data_final = {0};
                 data_atual.tm_mday = diaI;
-                data_atual.tm_mon = mesI--;
+                data_atual.tm_mon = --mesI;
                 data_atual.tm_year = anoI - 1900;
                 data_final.tm_mday = diaII;
-                data_final.tm_mon = mesII--;
+                data_final.tm_mon = --mesII;
                 data_final.tm_year = anoII - 1900;
-                char stringdatafinal[9];
-                strftime(stringdatafinal, sizeof(stringdatafinal), "%d%m%Y", &data_final);
-                int valordinheirototal = 0, valoralimentacaototal = 0, valorcreditototal = 0, valordebitototal = 0, valorpixtotal = 0;
+                char stringdatafinal[13];
+                strftime(stringdatafinal, sizeof(stringdatafinal), "%02d%m%Y", &data_final);
+                strcat(stringdatafinal, ".txt");
+                float valordinheirototal = 0; 
+                float valoralimentacaototal = 0; 
+                float valorcreditototal = 0; 
+                float valordebitototal = 0;
+                float valorpixtotal = 0;
                 int killswitch = 0;
                 while (killswitch != 1) {
-                    
+                    char stringdataatual[13];
+                    strftime(stringdataatual, sizeof(stringdataatual), "%02d%m%Y", data_atual);
+                    if (strcmp(stringdataatual, stringdatafinal) == 0) killswitch++;
+                    strcat(stringdataatual, ".txt");
+                    if (procurarArquivo(stringdataatual) == 0) {
+                        FILE *arquivoatual = fopen(stringdataatual, "a+");
+                        struct Linharelatorio linha;
+                        while (fscanf(arquivoatual, "%d|%d|%.2f|%c\n", &linha.id, &linha.quantidade, &linha.preco, &linha.metododavenda) != EOF) {
+                            switch(linha.metododavenda) {
+                                case 'C':
+                                    valorcreditototal += linha.preco;
+                                    break;
+                                case 'D':
+                                    valordebitototal += linha.preco;
+                                    break;
+                                case 'P':
+                                    valorpixtotal += linha.preco;
+                                    break;
+                                case '$':
+                                    valordinheirototal += linha.preco;
+                                    break;
+                                case 'A':
+                                    valoralimentacaototal += linha.preco;
+                                    break;
+                                default:
+                                    printf("\nErro ao ler método de pagamento.");
+                            }                           
+                        }
+                        fclose(arquivoatual);
+                    }
+                    time_t segatual = mktime(&data_atual);
+                    segatual += 86400;
+                    data_atual = *localtime(&segatual);
                 }
-
-
+                printf("\nValor em dinheiro total: R$%.2f", valordinheirototal);
+                printf("\nValor em vale-alimentação total: R$%.2f", valoralimentacaototal);
+                printf("\nValor crédito bruto: R$%.2f", valorcreditototal);
+                printf("\nValor débito bruto: R$%.2f", valordebitototal);
+                printf("\nValor Pix bruto: R$%.2f", valorpixtotal);
+                float creditoliquidototal = valorcreditototal * 0.97;
+                float debitoliquidototal = valordebitototal * 0.98;
+                float pixliquidototal = valorpixtotal * 0.995;
+                printf("\nValor crédito líquido: R$.2f", creditoliquidototal);
+                printf("\nValor débito líquido: R$.2f", debitoliquidototal);
+                printf("\nValor Pix líquido: R$.2f", pixliquidototal);
+                float valorbrutototal = valordinheirototal + valoralimentacaototal + valorcreditototal + valordebitototal + valorpixtotal;
+                float valorliquidototal = valordinheirototal + valoralimentacaototal + creditoliquidototal + debitoliquidototal + pixliquidototal;
+                printf("\nValor bruto total: R$%.2f", valorbrutototal);
+                printf("\nValor líquido total: R$%.2f", valorliquidototal);
+                system("pause");
+                break;
+            case 'S':
+                system("pause");
+                break;
+            default:
+                printf("\nOpção inválida, tente novamente.");
+                system("pause");
         }
     } while (toupper(saida) != 'S');
 }
