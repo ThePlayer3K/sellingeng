@@ -6,12 +6,11 @@
 #include <math.h>
 #include <time.h>
 
-// Declaração dos structs (assumindo que estão em outros arquivos)
 struct Produto {
     int id;
     char nome[76];
     float preco;
-};
+}; 
 
 typedef struct {
     int id;
@@ -78,7 +77,7 @@ void motorVendas() {
                     erroproduto = scanf("%d", &idproduto);
                     if (erroproduto != 1) {
                         printf("\nErro ao registar ID de produto. Tente novamente\n");
-                        while(getchar() != '\n'); // Limpa buffer
+                        while(getchar() != '\n');
                     } else {
                         FILE *produtos = fopen("produtos.txt", "r");
                         if (produtos == NULL) {
