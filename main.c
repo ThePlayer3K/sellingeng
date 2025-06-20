@@ -9,6 +9,14 @@
 
 void produtos();
 void motorVendas();
+void Visualizar();
+float encontrarPreco(int id);
+void carregarProdutos();
+int lerDia();
+int lerMes();
+int lerAno();
+int procurarArquivo(char[] nomearquivo);
+char *procurarNomeProduto(int id);
 
 int main(void){
     setlocale(LC_ALL, "Portuguese");
