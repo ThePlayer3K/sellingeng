@@ -6,11 +6,6 @@
 #include <time.h>
 #include <windows.h>
 
-int numprodutos = 0;
-while (fscanf(produtos, "%d|%75[^|]|%f\n", &produto.id, produto.nome, &produto.preco) != EOF) {
-    numprodutos++;
-}
-
 struct Produto {
     int id;
     char nome[76];
@@ -29,10 +24,23 @@ struct Produtolistado {
     int quantidade;
 };
 
+int numprodutos = 0;
+
+void carregarProdutos() {
+    FILE *listaprodutos = fopen("produtos.txt", "a+");
+    if (!produtos) {
+        printf("\nErro ao abrir produtos.txt");
+        return;
+    }
+    struct Produto produto;
+    while (fscanf(listaprodutos, "%d|%75[^|]|%f\n", &produto.id, produto.nome, &produto.preco) != EOF) numprodutos++;
+    fclose(produtos);
+}
+
 int lerDia() {
     int n = 0;
     do {
-        scanf("%d");
+        scanf("%d", &n);
         if (n < 1 || n > 31) {
             printf("\nDia inválido: tente novamente: ");
         } 
@@ -43,7 +51,7 @@ int lerDia() {
 int lerMes() {
     int n = 0;
     do {
-        scanf("%d");
+        scanf("%d", &n);
         if (n < 1 || n > 12) {
             printf("\nMês inválido: tente novamente: ");
         } 
@@ -51,10 +59,10 @@ int lerMes() {
     return n;
 }
 
-int lerMes() {
+int lerAno() {
     int n = 10000;
     do {
-        scanf("%d");
+        scanf("%d", &n);
         if (n > 9999) {
             printf("\nAno inválido: tente novamente: ");
         } 
@@ -76,34 +84,31 @@ int procurarArquivo(char[] nomearquivo) {
     if (ultimabarra != NULL) {
         *(ultimabarra + 1) = '\0';
     } else {
-        strcpy(caminhoprograma, MAX_PATH, ".\\");
+        strcpy(caminhoprograma, ".\\");
     }
 
-    if (strcpy(caminhocompletoarquivo, MAX_PATH, nomearquivo) != 0) {
-        printf("\nErro ao copiar nome do arquivo. Relate o erro.");
-        return 2;
-    }
-    if (strcat(caminhocompletoarquivo, MAX_PATH, nomearquivo) != 0) {
-        printf("\nErro ao concatenar nome do arquivo. Relate o erro.");
-        return 2;
-    }
-
+    strcpy(caminhocompletoarquivo, caminhoprograma);
+    strcpy(caminhocompletoarquivo, nomearquivo);
     if (GetFileAttributes(caminhocompletoarquivo) == INVALID_FILE_ATTRIBUTES) {
         return 1;
     } else {
         return 0;
-    }
-    
+    }  
 }
 
 char *procurarNomeProduto(int id) {
-    FILE *listaprodutos("produtos.txt", "a+");
+    static char nome[76];
+    FILE *listaprodutos = fopen("produtos.txt", "a+");
+    if (!listaprodutos) return "ERRO AO LER";
     struct Produto produto;
     while (fscanf(listaprodutos, "%d|%75[^|]|%f\n", &produto.id, produto.nome, &produto.preco) != EOF) {
-        if (produto.id = id) {
-            return produto.nome;
+        if (produto.id == id) {
+            strcpy(nome, produto.nome);
+            fclose(listaprodutos);
+            return nome;
         }
     }
+    fclose(listaprodutos);
     return "ERRO AO LER";
 }
 
@@ -129,13 +134,23 @@ void Visualizar() {
                     erroscan = scanf(" %9[^\n]", data);
                     if (erroscan != 1) {
                         printf("\nErro ao ler data! ");
+                        system("pause");
                         continue;
                     }
                     strcat(data, ".txt");
                     int verificararquivo = procurarArquivo(data);
-                    if (verificararquivo == 1) printf("\nArquivo com esta data não encontrado");
-                } while (erroscan != 1 && arquivoencontrado != 0);
-                FILE *relatorio = (data, "a+");
+                    if (verificararquivo == 1)  {
+                        printf("\nArquivo com esta data não encontrado");
+                        continue;
+                    } else {
+                        arquivoencontrado = 0;
+                    }
+                } while (erroscan != 1 || arquivoencontrado != 0);
+                FILE *relatorio = fopen(data, "a+");
+                if (!relatorio) {
+                    printf("\nErro ao abrir arquivo.");
+                    break;
+                }
                 struct Linharelatorio linha;
                 float valorcredito = 0.0;
                 float valordebito = 0.0;
@@ -144,7 +159,7 @@ void Visualizar() {
                 float valoralimentacao = 0.0;
                 struct Produtolistado prodvendidos[numprodutos];
                 int contadorprodutos = 0;
-                while (fscanf(data, "%d|%d|%.2f|%c\n", &linha.id, &linha.quantidade, &linha.preco, &linha.metododavenda) != EOF) {
+                while (fscanf(relatorio, "%d|%d|%.2f|%c\n", &linha.id, &linha.quantidade, &linha.preco, &linha.metododavenda) != EOF) {
                     switch(linha.metododavenda) {
                         case 'C':
                             valorcredito += linha.preco;
@@ -164,21 +179,28 @@ void Visualizar() {
                         default:
                             printf("\nErro ao ler método de pagamento.");
                     }
-                    for (int i = 0; i <= contadorprodutos; i++) {
-                        if (linha.id == prodvendidos[contadorprodutos]) {
-                            prodvendidos[contadorprodutos].quantidade += linha.quantidade;
-                        } else {
-                            prodvendidos[contadorprodutos].id = linha.id;
-                            prodvendidos[contadorprodutos].quantidade = linha.quantidade;
-                            contadorprodutos++;
+                    int encontrado = 0;
+                    for (int i = 0; i < contadorprodutos; i++) {
+                        if (linha.id == prodvendidos[i].id) {
+                            prodvendidos[i].quantidade += linha.quantidade;
+                            encontrado = 1;
+                            break;
                         }
                     }
+                    if (encontrado == 0) {
+                        prodvendidos[contadorprodutos].id = linha.id;
+                        prodvendidos[contadorprodutos].quantidade = linha.quantidade;
+                        contadorprodutos++;
+                    }
                 }
-                for (int i = 0; i <= contadorprodutos; i++) {
-                    char produtoatual[76] = procurarNomeProduto(prodvendidos[contadorprodutos].id);
-                    int quantidadedoprod = prodvendidos[contadorprodutos].quantidade;
-                    printf("\n%s x%d", produtoatual, quantidadedoprod);
+                fclose(relatorio);
+                
+                for (int i = 0; i < contadorprodutos; i++) {
+                    char produtoatual[76] = procurarNomeProduto(prodvendidos[i].id);
+                    int quantidadeprod = prodvendidos[i].quantidade;
+                    printf("\n%s x%d", produtoatual, quantidadeprod);
                 }
+
                 printf("\n\n\nValor em dinheiro: R$%.2f", valordinheiro);
                 printf("\nValor vale-alimentação: R$%.2f", valoralimentacao);
                 printf("\nValor crédito bruto: R$%.2f", valorcredito);
@@ -207,36 +229,40 @@ void Visualizar() {
                 printf("\nInsira o ano inicial: ");
                 anoI = lerAno();
                 printf("\nInsira o dia final: ");
-                diaII = lerDia();
+                diaF = lerDia();
                 printf("\nInsira o mês final: ");
-                mesII = lerMes();
+                mesF = lerMes();
                 printf("\nInsira o ano final: ");
-                anoII = lerAno();
+                anoF = lerAno();
                 struct tm data_atual = {0};
                 struct tm data_final = {0};
                 data_atual.tm_mday = diaI;
-                data_atual.tm_mon = --mesI;
+                data_atual.tm_mon = mesI - 1;
                 data_atual.tm_year = anoI - 1900;
-                data_final.tm_mday = diaII;
-                data_final.tm_mon = --mesII;
-                data_final.tm_year = anoII - 1900;
+                data_final.tm_mday = diaF;
+                data_final.tm_mon = mesF - 1;
+                data_final.tm_year = anoF - 1900;
                 char stringdatafinal[13];
-                strftime(stringdatafinal, sizeof(stringdatafinal), "%02d%m%Y", &data_final);
+                strftime(stringdatafinal, sizeof(stringdatafinal), "%d%m%Y", &data_final);
                 strcat(stringdatafinal, ".txt");
                 float valordinheirototal = 0; 
                 float valoralimentacaototal = 0; 
                 float valorcreditototal = 0; 
                 float valordebitototal = 0;
                 float valorpixtotal = 0;
+                struct Linharelatorio linha;
+
                 int killswitch = 0;
                 while (killswitch != 1) {
                     char stringdataatual[13];
-                    strftime(stringdataatual, sizeof(stringdataatual), "%02d%m%Y", data_atual);
-                    if (strcmp(stringdataatual, stringdatafinal) == 0) killswitch++;
+                    strftime(stringdataatual, sizeof(stringdataatual), "%d%m%Y", &data_atual);
+                    if (strcmp(stringdataatual, stringdatafinal) == 0) killswitch = 1;
                     strcat(stringdataatual, ".txt");
+
                     if (procurarArquivo(stringdataatual) == 0) {
                         FILE *arquivoatual = fopen(stringdataatual, "a+");
-                        struct Linharelatorio linha;
+                        if (!arquivoatual) continue;
+                        
                         while (fscanf(arquivoatual, "%d|%d|%.2f|%c\n", &linha.id, &linha.quantidade, &linha.preco, &linha.metododavenda) != EOF) {
                             switch(linha.metododavenda) {
                                 case 'C':
@@ -260,8 +286,7 @@ void Visualizar() {
                         }
                         fclose(arquivoatual);
                     }
-                    time_t segatual = mktime(&data_atual);
-                    segatual += 86400;
+                    time_t segatual = mktime(&data_atual) + 86400;
                     data_atual = *localtime(&segatual);
                 }
                 printf("\nValor em dinheiro total: R$%.2f", valordinheirototal);
@@ -272,9 +297,8 @@ void Visualizar() {
                 float creditoliquidototal = valorcreditototal * 0.97;
                 float debitoliquidototal = valordebitototal * 0.98;
                 float pixliquidototal = valorpixtotal * 0.995;
-                printf("\nValor crédito líquido: R$.2f", creditoliquidototal);
-                printf("\nValor débito líquido: R$.2f", debitoliquidototal);
-                printf("\nValor Pix líquido: R$.2f", pixliquidototal);
+                printf("\nValor crédito líquido: R$%.2f", debitoliquidototal);
+                printf("\nValor Pix líquido: R$%.2f", pixliquidototal);
                 float valorbrutototal = valordinheirototal + valoralimentacaototal + valorcreditototal + valordebitototal + valorpixtotal;
                 float valorliquidototal = valordinheirototal + valoralimentacaototal + creditoliquidototal + debitoliquidototal + pixliquidototal;
                 printf("\nValor bruto total: R$%.2f", valorbrutototal);
