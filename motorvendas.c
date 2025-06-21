@@ -5,6 +5,7 @@
 #include <string.h>
 #include <math.h>
 #include <time.h>
+#include "motorvendas.h"
 
 struct Produto {
     int id;
@@ -12,11 +13,11 @@ struct Produto {
     float preco;
 }; 
 
-typedef struct {
+struct ItemDaVenda{
     int id;
     int quantidade;
     float preco;
-} ItemDaVenda;
+};
 
 char metpagamento[5] = {'$', 'C', 'D', 'P', 'A'};
 
@@ -66,7 +67,7 @@ void motorVendas() {
         scanf(" %c", &saida);
         if (toupper(saida) != 'N') {
             int contadorvetor = 0;
-            ItemDaVenda venda[30];
+            struct ItemDaVenda venda[30];
             char continuarvenda = 'S';
             do {
                 int idproduto, quantidade;

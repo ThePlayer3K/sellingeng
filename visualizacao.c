@@ -5,6 +5,7 @@
 #include <ctype.h>
 #include <time.h>
 #include <windows.h>
+#include "visualizacao.h"
 
 struct Produto {
     int id;
@@ -28,13 +29,13 @@ int numprodutos = 0;
 
 void carregarProdutos() {
     FILE *listaprodutos = fopen("produtos.txt", "a+");
-    if (!produtos) {
+    if (!listaprodutos) {
         printf("\nErro ao abrir produtos.txt");
         return;
     }
     struct Produto produto;
     while (fscanf(listaprodutos, "%d|%75[^|]|%f\n", &produto.id, produto.nome, &produto.preco) != EOF) numprodutos++;
-    fclose(produtos);
+    fclose(listaprodutos);
 }
 
 int lerDia() {
@@ -70,7 +71,7 @@ int lerAno() {
     return n;
 }
 
-int procurarArquivo(char[] nomearquivo) {
+int procurarArquivo(char nomearquivo[]) {
     char caminhoprograma[MAX_PATH];
     char caminhocompletoarquivo[MAX_PATH];
     DWORD tamanhocaminho;
@@ -88,7 +89,7 @@ int procurarArquivo(char[] nomearquivo) {
     }
 
     strcpy(caminhocompletoarquivo, caminhoprograma);
-    strcpy(caminhocompletoarquivo, nomearquivo);
+    strcat(caminhocompletoarquivo, nomearquivo);
     if (GetFileAttributes(caminhocompletoarquivo) == INVALID_FILE_ATTRIBUTES) {
         return 1;
     } else {
@@ -196,7 +197,8 @@ void Visualizar() {
                 fclose(relatorio);
                 
                 for (int i = 0; i < contadorprodutos; i++) {
-                    char produtoatual[76] = procurarNomeProduto(prodvendidos[i].id);
+                    char produtoatual[76]; 
+                    strcpy(produtoatual, procurarNomeProduto(prodvendidos[i].id));
                     int quantidadeprod = prodvendidos[i].quantidade;
                     printf("\n%s x%d", produtoatual, quantidadeprod);
                 }
@@ -215,7 +217,7 @@ void Visualizar() {
                 float totalbruto = valordinheiro + valoralimentacao + valorcredito + valordebito + valorpix;
                 float totalliquido = valordinheiro + valoralimentacao + creditoliquido + debitoliquido + pixliquido;
                 printf("\nValor bruto total: R$%.2f", totalbruto);
-                printf("\nValor líquido total: R$.2f", totalliquido);
+                printf("\nValor líquido total: R$.%2f", totalliquido);
                 system("pause");
                 break;
             case 'M':

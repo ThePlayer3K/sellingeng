@@ -5,22 +5,15 @@
 #include <ctype.h>
 #include <math.h>
 #include <time.h>
+#include "visualizacao.h"
+#include "produtos.h"
+#include "motorvendas.h"
 
-
-void produtos();
-void motorVendas();
-void Visualizar();
-float encontrarPreco(int id);
-void carregarProdutos();
-int lerDia();
-int lerMes();
-int lerAno();
-int procurarArquivo(char[] nomearquivo);
-char *procurarNomeProduto(int id);
 
 int main(void){
     setlocale(LC_ALL, "Portuguese");
     system("chcp 1252 > nul");
+    carregarProdutos();
     char saida = 'n';
     do {
         char opcao;

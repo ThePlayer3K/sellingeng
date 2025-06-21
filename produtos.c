@@ -4,6 +4,7 @@
 #include <ctype.h>
 #include <math.h>
 #include <locale.h>
+#include "produtos.h"
 
 
 struct Produto {
