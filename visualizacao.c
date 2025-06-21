@@ -74,9 +74,9 @@ int lerAno() {
 int procurarArquivo(char nomearquivo[]) {
     FILE *arquivo = fopen(nomearquivo, "a+");
     if (arquivo) {
-        return true;
+        return 0;
     }
-    return false;
+    return 1;
 }
 
 char *procurarNomeProduto(int id) {
