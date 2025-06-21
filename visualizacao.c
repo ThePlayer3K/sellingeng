@@ -72,29 +72,11 @@ int lerAno() {
 }
 
 int procurarArquivo(char nomearquivo[]) {
-    char caminhoprograma[MAX_PATH];
-    char caminhocompletoarquivo[MAX_PATH];
-    DWORD tamanhocaminho;
-    tamanhocaminho = GetModuleFileName(NULL, caminhoprograma, MAX_PATH);
-    if (tamanhocaminho == 0) {
-        printf("\nErro ao obter caminho do executável do programa. Relate o erro.");
-        return 2;
+    FILE *arquivo = fopen(nomearquivo, "a+");
+    if (arquivo) {
+        return true;
     }
-
-    char *ultimabarra = strrchr(caminhoprograma, '\\');
-    if (ultimabarra != NULL) {
-        *(ultimabarra + 1) = '\0';
-    } else {
-        strcpy(caminhoprograma, ".\\");
-    }
-
-    strcpy(caminhocompletoarquivo, caminhoprograma);
-    strcat(caminhocompletoarquivo, nomearquivo);
-    if (GetFileAttributes(caminhocompletoarquivo) == INVALID_FILE_ATTRIBUTES) {
-        return 1;
-    } else {
-        return 0;
-    }  
+    return false;
 }
 
 char *procurarNomeProduto(int id) {
