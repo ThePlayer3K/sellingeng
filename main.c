@@ -14,7 +14,6 @@
 int main(void){
     setlocale(LC_ALL, "Portuguese");
     system("chcp 1252 > nul");
-    carregarProdutos();
     char saida = 'n';
     do {
         char opcao;
