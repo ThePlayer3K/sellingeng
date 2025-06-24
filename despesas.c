@@ -47,6 +47,8 @@ int verificarPipe(char str[]) {
 }
 
 void despesas() {
+    setlocale(LC_ALL, "Portuguese");
+    system("chcp 1252 > nul");
     char saida = 'N';
     do {
         system("cls");
