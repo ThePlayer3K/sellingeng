@@ -8,6 +8,7 @@
 #include "visualizacao.h"
 #include "produtos.h"
 #include "motorvendas.h"
+#include "despesas.h"
 
 
 int main(void){
@@ -36,7 +37,7 @@ int main(void){
                 system("cls");
                 break;
             case 'V':
-                /*TODO*/
+                Visualizacao();
                 break;
             case 'D':
                 /*TODO*/

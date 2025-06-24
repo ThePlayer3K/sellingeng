@@ -12,12 +12,23 @@ struct Produto {
     char nome[76];
     float preco;
 };
+
+int verificarPipe(char str[]) {
+    int i = 0;
+    while (str[i] != '\0') {
+        if (str[i] == '|') {
+            return 1;
+        }
+        i++;
+    }
+    return 0; 
+}
+
 void produtos() {
     setlocale(LC_ALL, "Portuguese");
     char saidaprod = 'n';
     do {
         system("cls");
-        system("clear");
         printf("\nBem-vindo ao menu de gerenciamento de produtos! Escolha o que deseja fazer: ");
         printf("\n(C) Cadastrar Produto");
         printf("\n(L) Listar produtos");
@@ -38,11 +49,12 @@ void produtos() {
                     erroid = scanf("%d", &produto.id);
                     if (erroid != 1) printf("\nErro! Digite um ID numérico adequado");
                 } while (erroid != 1);
-                int erronome = 0;
+                int erronome = 0, erropipe = 1;
                 do {
                     printf("\nDigite o nome do produto: ");
                     scanf(" %75[^\n]", produto.nome);
-                    if (strlen(produto.nome) > 76) {
+                    erropipe = verificarPipe(produto.nome);
+                    if (strlen(produto.nome) > 76 || erropipe != 0) {
                         printf("\nErro, digite novamente o nome do produto!");
                     } else {
                         erronome = 1;
@@ -60,7 +72,7 @@ void produtos() {
                 break;
             }
             case 'L': {
-                FILE *produtos = fopen("produtos.txt", "a+");
+                FILE *produtos = fopen("produtos.txt", "r");
                 struct Produto produto;
                 printf("\nLista de produtos");
                 while (fscanf(produtos, "%d|%75[^|]|%f\n", &produto.id, produto.nome, &produto.preco) != EOF) {
@@ -71,32 +83,32 @@ void produtos() {
                 break;
             }
             case 'E': {
-                FILE *produtos = fopen("produtos.txt", "a+");
+                FILE *produtos = fopen("produtos.txt", "r+");
 
                 int idAlvo;
                 printf("\nDigite o ID do produto a ser editado: ");
                 scanf("%d", &idAlvo);
-                
                 struct Produto produto;
                 int encontrado = 0;
                 FILE *temp = fopen("temp.txt", "w");
                 while (fscanf(produtos, "%d|%75[^|]|%f\n", &produto.id, produto.nome, &produto.preco) != EOF) {
                     if (produto.id == idAlvo) {
-                        int erronome = 0;
+                        int erronome = 0, erropipe = 1;
                         do {
-                            printf("\nDigite o novo nome do produto (ou pressione Enter para não alterar): ");
+                            printf("\nDigite o novo nome do produto (ou 0 para não alterar): ");
                             char novoNome[76];
                             erronome = scanf( " %75[^\n]", novoNome);
-                            if (strlen(novoNome) > 0) strcpy(produto.nome, novoNome);
-                            if (erronome != 1) printf("\nErro ao registrar novo nome! tente novamente!");
+                            erropipe = verificarPipe(novoNome);
+                            if (strlen(novoNome) > 0 && strcmp(novoNome, "0") != 0) strcpy(produto.nome, novoNome);
+                            if (erronome != 1 || erropipe != 0) printf("\nErro ao registrar novo nome! tente novamente!");
                         } while (erronome != 1);
                         int erropreco = 0;
                         do {
-                            printf("\nDigite o novo preço do produto (ou pressione Enter para não alterar): ");
+                            printf("\nDigite o novo preço do produto (ou pressione 0 para não alterar): ");
                             float novoPreco;
                             erropreco = scanf("%f", &novoPreco);
                             if (novoPreco > 0) produto.preco = novoPreco;
-                            if (erropreco != 1) printf("\nErro ao regsitrar novo preço! Digite novamente o preço em reais");
+                            if (erropreco != 1) printf("\nErro ao registrar novo preço! Digite novamente o preço em reais");
                         } while (erropreco != 1);
                         encontrado = 1;
                     }
