@@ -7,6 +7,6 @@ int lerMes();
 int lerAno();
 int procurarArquivo(char nomearquivo[]);
 char *procurarNomeProduto(int id);
-void carregarProdutos();
+int carregarProdutos();
 
 #endif

@@ -3,10 +3,9 @@
 #include <locale.h>
 #include <ctype.h>
 #include <string.h>
-#include <sys/stat.h>
 #include <sys/types.h>
-#include <direct.h>
 #include "despesas.h"
+#include "produtos.h"
 
 struct Despesa {
     char nomedespesa[76];
@@ -35,17 +34,6 @@ int idRelatorioAtual() {
     return contador;
 }
 
-int verificarPipe(char str[]) {
-    int i = 0;
-    while (str[i] != '\0') {
-        if (str[i] == '|') {
-            return 1;
-        }
-        i++;
-    }
-    return 0; 
-}
-
 void despesas() {
     setlocale(LC_ALL, "Portuguese");
     system("chcp 1252 > nul");
@@ -61,7 +49,7 @@ void despesas() {
         scanf(" %c", &saida);
         saida = toupper(saida);
         switch(saida) {
-            case 'C':
+            case 'C': {
                 struct Despesa despesas[30];
                 int verificacao = 0, verificacaopipe = 1;
                 char datainicial[9], datafinal[9];
@@ -120,7 +108,7 @@ void despesas() {
                 char nomearquivo[16];
                 sprintf(nomearquivo, "%d.txt", idatual);
                 char caminhoarquivo[64];
-                _mkdir("relatorios");
+                system("mkdir relatorios > nul");
                 sprintf(caminhoarquivo, "relatorios/%s", nomearquivo);
                 FILE *arquivorelatorio = fopen(caminhoarquivo, "a+");
                 if (arquivorelatorio == NULL) {
@@ -140,20 +128,22 @@ void despesas() {
                 fclose(listarelatorios);
                 system("pause");
                 break;
-            case 'V':
+            }
+            case 'V': {
                 system("cls");
                 printf("\n\n\n\n");
                 FILE *relatorios = fopen("listarelatorios.txt", "r");
                 struct Relatorio relatorio;
                 printf("ID         Data Inicial          Data Final           Valor Total\n");
-                while (fscanf(relatorios, "%d|%s|%s|%.2f\n", &relatorio.id, relatorio.datainicial, relatorio.datafinal, &relatorio.valortotal) != EOF) {
+                while (fscanf(relatorios, "%d|%s|%s|%f\n", &relatorio.id, relatorio.datainicial, relatorio.datafinal, &relatorio.valortotal) != EOF) {
                     printf("%d          %s          %s          R$%.2f\n", relatorio.id, relatorio.datainicial, relatorio.datafinal, relatorio.valortotal);
                 }
                 printf("\n\n\n\n");
                 system("pause");
                 fclose(relatorios);
                 break;
-            case 'A':
+            }
+            case 'A': {
                 int idvalidado = 0;
                 int idpraapagar;
                 do {
@@ -164,7 +154,7 @@ void despesas() {
                 FILE *listaid = fopen("listarelatorios.txt", "r+");
                 struct Relatorio buscaid;
                 int idencontrado = 0;
-                while (fscanf(listaid, "%d|%s|%s|%.2f\n", &buscaid.id, buscaid.datainicial, buscaid.datafinal, &buscaid.valortotal) != EOF) {
+                while (fscanf(listaid, "%d|%s|%s|%f\n", &buscaid.id, buscaid.datainicial, buscaid.datafinal, &buscaid.valortotal) != EOF) {
                     if (buscaid.id == idpraapagar) {
                         idencontrado = 1;
                     }
@@ -184,7 +174,7 @@ void despesas() {
                         fclose(listaid);
                         FILE *listaid = fopen("listarelatorios.txt", "r");
                         FILE *temp = fopen("temp.txt", "a+");
-                        while (fscanf(listaid, "%d|%s|%s|%.2f\n", &buscaid.id, buscaid.datainicial, buscaid.datafinal, &buscaid.valortotal) != EOF) {
+                        while (fscanf(listaid, "%d|%s|%s|%f\n", &buscaid.id, buscaid.datainicial, buscaid.datafinal, &buscaid.valortotal) != EOF) {
                             if (buscaid.id != idpraapagar) {
                                 fprintf(temp, "%d|%s|%s|%.2f\n", buscaid.id, buscaid.datainicial, buscaid.datafinal, buscaid.valortotal);
                             }
@@ -198,12 +188,15 @@ void despesas() {
                 fclose(listaid);
                 system("pause");
                 break;
-            case 'S':
+            }
+            case 'S': {
                 system("pause");
                 system("cls");
                 return;
-            default:
+            }
+            default: {
                 printf("\nEntrada inválida! Tente novamente!\n");
+            }
         }
     } while (saida != 'S');
 }

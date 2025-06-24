@@ -110,7 +110,7 @@ void Visualizar() {
         scanf(" %c", &saida);
         saida = toupper(saida);
         switch(saida) {
-            case 'U':
+            case 'U': {
                 if (verificarcarregamento != 0) {
                     printf("\nErro ao carregar produtos! Não será possível usar esta função agora.\nReinicie o programa ou crie um produto e tente novamente.");
                     return;
@@ -147,9 +147,9 @@ void Visualizar() {
                 float valoralimentacao = 0.0;
                 struct Produtolistado prodvendidos[numprodutos];
                 int contadorprodutos = 0;
-                while (fscanf(relatorio, "%d|%d|%.2f|%c\n", &linha.id, &linha.quantidade, &linha.preco, &linha.metododavenda) != EOF) {
+                while (fscanf(relatorio, "%d|%d|%f|%c\n", &linha.id, &linha.quantidade, &linha.preco, &linha.metododavenda) != EOF) {
                     switch(linha.metododavenda) {
-                        case 'C':
+                        case 'C': 
                             valorcredito += linha.preco;
                             break;
                         case 'D':
@@ -207,7 +207,8 @@ void Visualizar() {
                 printf("\nValor líquido total: R$.%2f", totalliquido);
                 system("pause");
                 break;
-            case 'M':
+            }
+            case 'M': {
                 int diaI, mesI, anoI;
                 int diaF, mesF, anoF;
                 printf("\nTenha em mente as datas (dia, mês, ano) inicial e final do período que quer compreender as entradas do mês.");
@@ -255,7 +256,7 @@ void Visualizar() {
                             continue;
                         }
                         
-                        while (fscanf(arquivoatual, "%d|%d|%.2f|%c\n", &linha.id, &linha.quantidade, &linha.preco, &linha.metododavenda) != EOF) {
+                        while (fscanf(arquivoatual, "%d|%d|%f|%c\n", &linha.id, &linha.quantidade, &linha.preco, &linha.metododavenda) != EOF) {
                             switch(linha.metododavenda) {
                                 case 'C':
                                     valorcreditototal += linha.preco;
@@ -301,12 +302,15 @@ void Visualizar() {
                 }
                 system("pause");
                 break;
-            case 'S':
+            }
+            case 'S': {
                 system("pause");
                 break;
-            default:
+            }
+            default: {
                 printf("\nOpção inválida, tente novamente.");
                 system("pause");
+            }
         }
     } while (toupper(saida) != 'S');
 }

@@ -37,7 +37,7 @@ int main(void){
                 system("cls");
                 break;
             case 'V':
-                Visualizacao();
+                Visualizar();
                 break;
             case 'D':
                 /*TODO*/
