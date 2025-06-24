@@ -115,17 +115,25 @@ void motorVendas() {
                     }
                 } while (erroproduto != 1);
                 
-                printf("\nQuantos deste produto serão vendidos? ");
-                scanf("%d", &quantidade);
+                int verificarquantidade = 0;
+                do {
+                    printf("\nQuantos deste produto serão vendidos? ");
+                    verificarquantidade = scanf("%d", &quantidade);
+                    if (verificarquantidade != 1 || quantidade < 0) {
+                        verificarquantidade = 0;
+                        printf("\nQuantidade inválida. Tente novamente.");
+                    }
+                } while (verificarquantidade != 1);
                 precovenda = quantidade * encontrarPreco(idproduto);
-                venda[contadorvetor].id = idproduto;
-                venda[contadorvetor].quantidade = quantidade;
-                venda[contadorvetor].preco = precovenda;
-                contadorvetor++;
                 
                 if (contadorvetor >= 30) {
                     printf("\nLimite de itens por venda excedido!\n");
                     break;
+                } else {
+                    venda[contadorvetor].id = idproduto;
+                    venda[contadorvetor].quantidade = quantidade;
+                    venda[contadorvetor].preco = precovenda;
+                    contadorvetor++;
                 }
                 
                 printf("\nDeseja continuar a venda? (S/N): ");
@@ -133,32 +141,33 @@ void motorVendas() {
             } while (toupper(continuarvenda) != 'N');
             
             char metododavenda;
-            int erropagamento = 0;
+            int pagamentovalido = 0;
             do {
                 printf("\nSelecione um meio de pagamento usando um caractere: ");
                 printf("\n($) Dinheiro");
                 printf("\n(C) Crédito");
                 printf("\n(D) Débito");
                 printf("\n(A) Vale-Alimentação\n");
+                printf("\n(P) Pix");
                 scanf(" %c", &metododavenda);
                 metododavenda = toupper(metododavenda);
-                erropagamento = 0;
+                pagamentovalido = 0;
                 for (int i = 0; i < 5; i++) {
                     if (metododavenda == metpagamento[i]) {
-                        erropagamento = 1;
+                        pagamentovalido = 1;
                         break;
                     }
                 }
-                if (erropagamento != 1) {
+                if (pagamentovalido != 1) {
                     printf("\nErro ao obter método de pagamento, tente novamente!\n");
                     continue;
                 } else {
                     printf("\nVocê tem certeza do método de pagamento? (S/N): ");
                     char confirmacaometodo;
                     scanf(" %c", &confirmacaometodo);
-                    if (toupper(confirmacaometodo) != 'S') erropagamento = 0;
+                    if (toupper(confirmacaometodo) != 'S') pagamentovalido = 0;
                 }
-            } while (erropagamento != 1);
+            } while (pagamentovalido != 1);
             
             for (int i = 0; i < contadorvetor; i++) {
                 fprintf(relatoriovendas, "%d|%d|%.2f|%c\n", venda[i].id, venda[i].quantidade, venda[i].preco, metododavenda);
@@ -168,7 +177,10 @@ void motorVendas() {
             system("cls");   
         } else {
             printf("\nTem certeza que quer finalizar o dia de vendas? (S/N)? ");
-            scanf(" %c", &saida);
+            char confirmarsaida;
+            scanf(" %c", &confirmarsaida);
+            confirmarsaida = toupper(confirmarsaida);
+            if (confirmarsaida != 'S') saida = 'N';
         }
     } while (toupper(saida) != 'N');
     

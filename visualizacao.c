@@ -26,15 +26,16 @@ struct Produtolistado {
 
 int numprodutos = 0;
 
-void carregarProdutos() {
-    FILE *listaprodutos = fopen("produtos.txt", "a+");
+int carregarProdutos() {
+    FILE *listaprodutos = fopen("produtos.txt", "r");
     if (!listaprodutos) {
         printf("\nErro ao abrir produtos.txt");
-        return;
+        return 1;
     }
     struct Produto produto;
     while (fscanf(listaprodutos, "%d|%75[^|]|%f\n", &produto.id, produto.nome, &produto.preco) != EOF) numprodutos++;
     fclose(listaprodutos);
+    return 0;
 }
 
 int lerDia() {
@@ -71,7 +72,7 @@ int lerAno() {
 }
 
 int procurarArquivo(char nomearquivo[]) {
-    FILE *arquivo = fopen(nomearquivo, "a+");
+    FILE *arquivo = fopen(nomearquivo, "r");
     if (arquivo) {
         return 0;
     }
@@ -98,6 +99,7 @@ void Visualizar() {
     char saida = 'A';
     setlocale(LC_ALL, "Portuguese");
     system("chcp 1252 > nul");
+    int verificarcarregamento = carregarProdutos();
     do {
         system("cls");
         printf("\nBem-vindo ao visualizador de vendas! Escolha as funções disponíveis");
@@ -109,11 +111,15 @@ void Visualizar() {
         saida = toupper(saida);
         switch(saida) {
             case 'U':
+                if (verificarcarregamento != 0) {
+                    printf("\nErro ao carregar produtos! Não será possível usar esta função agora.\nReinicie o programa ou crie um produto e tente novamente.");
+                    return;
+                }
                 char data[13];
                 int erroscan = 0, arquivoencontrado = 1;
                 do {
                     printf("\nInsira a data do arquivo mencionado (DDMMAAAA, tudo junto): ");
-                    erroscan = scanf(" %9[^\n]", data);
+                    erroscan = scanf(" %8[^\n]", data);
                     if (erroscan != 1) {
                         printf("\nErro ao ler data! ");
                         system("pause");
@@ -236,15 +242,18 @@ void Visualizar() {
                 struct Linharelatorio linha;
 
                 int killswitch = 0;
+                int arquivosfalhos = 0;
                 while (killswitch != 1) {
                     char stringdataatual[13];
                     strftime(stringdataatual, sizeof(stringdataatual), "%d%m%Y", &data_atual);
-                    if (strcmp(stringdataatual, stringdatafinal) == 0) killswitch = 1;
                     strcat(stringdataatual, ".txt");
 
                     if (procurarArquivo(stringdataatual) == 0) {
-                        FILE *arquivoatual = fopen(stringdataatual, "a+");
-                        if (!arquivoatual) continue;
+                        FILE *arquivoatual = fopen(stringdataatual, "r");
+                        if (!arquivoatual)  {
+                            arquivosfalhos += 1;
+                            continue;
+                        }
                         
                         while (fscanf(arquivoatual, "%d|%d|%.2f|%c\n", &linha.id, &linha.quantidade, &linha.preco, &linha.metododavenda) != EOF) {
                             switch(linha.metododavenda) {
@@ -271,6 +280,7 @@ void Visualizar() {
                     }
                     time_t segatual = mktime(&data_atual) + 86400;
                     data_atual = *localtime(&segatual);
+                    if (strcmp(stringdataatual, stringdatafinal) == 0) killswitch = 1;
                 }
                 printf("\nValor em dinheiro total: R$%.2f", valordinheirototal);
                 printf("\nValor em vale-alimentação total: R$%.2f", valoralimentacaototal);
@@ -280,12 +290,15 @@ void Visualizar() {
                 float creditoliquidototal = valorcreditototal * 0.97;
                 float debitoliquidototal = valordebitototal * 0.98;
                 float pixliquidototal = valorpixtotal * 0.995;
-                printf("\nValor crédito líquido: R$%.2f", debitoliquidototal);
+                printf("\nValor crédito líquido: R$%.2f", creditoliquidototal);
                 printf("\nValor Pix líquido: R$%.2f", pixliquidototal);
                 float valorbrutototal = valordinheirototal + valoralimentacaototal + valorcreditototal + valordebitototal + valorpixtotal;
                 float valorliquidototal = valordinheirototal + valoralimentacaototal + creditoliquidototal + debitoliquidototal + pixliquidototal;
                 printf("\nValor bruto total: R$%.2f", valorbrutototal);
                 printf("\nValor líquido total: R$%.2f", valorliquidototal);
+                if (arquivosfalhos > 0) {
+                    printf("\n\n%d dias não foram processados devido a erros. Ou os arquivos não existem, ou alguma circustância impediu a leitura.", arquivosfalhos);
+                }
                 system("pause");
                 break;
             case 'S':

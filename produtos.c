@@ -42,6 +42,10 @@ void produtos() {
         switch(opcaoprod) {
             case 'C': {
                 FILE *produtos = fopen("produtos.txt", "a+");
+                if (!produtos) {
+                    printf("\nErro ao carregar arquivo de produtos.");
+                    break;
+                }
                 struct Produto produto;
                 int erroid = 0;
                 do {
@@ -54,7 +58,7 @@ void produtos() {
                     printf("\nDigite o nome do produto: ");
                     scanf(" %75[^\n]", produto.nome);
                     erropipe = verificarPipe(produto.nome);
-                    if (strlen(produto.nome) > 76 || erropipe != 0) {
+                    if (erropipe != 0) {
                         printf("\nErro, digite novamente o nome do produto!");
                     } else {
                         erronome = 1;
@@ -84,6 +88,10 @@ void produtos() {
             }
             case 'E': {
                 FILE *produtos = fopen("produtos.txt", "r+");
+                if (!produtos) {
+                    printf("\nErro ao abrir arquivo de produtos.");
+                    break;
+                }
 
                 int idAlvo;
                 printf("\nDigite o ID do produto a ser editado: ");
@@ -91,24 +99,30 @@ void produtos() {
                 struct Produto produto;
                 int encontrado = 0;
                 FILE *temp = fopen("temp.txt", "w");
+                if (!temp) {
+                    printf("\nErro ao abrir arquivo temporário");
+                    break;
+                }
                 while (fscanf(produtos, "%d|%75[^|]|%f\n", &produto.id, produto.nome, &produto.preco) != EOF) {
                     if (produto.id == idAlvo) {
                         int erronome = 0, erropipe = 1;
                         do {
-                            printf("\nDigite o novo nome do produto (ou 0 para não alterar): ");
+                            printf("\nDigite o novo nome do produto (ou -1 para não alterar): ");
                             char novoNome[76];
                             erronome = scanf( " %75[^\n]", novoNome);
                             erropipe = verificarPipe(novoNome);
-                            if (strlen(novoNome) > 0 && strcmp(novoNome, "0") != 0) strcpy(produto.nome, novoNome);
+                            if (strcmp(novoNome, "-1") != 0) break;
+                            if (strlen(novoNome) > 0 && strcmp(novoNome, "-1") != 0) strcpy(produto.nome, novoNome);
                             if (erronome != 1 || erropipe != 0) printf("\nErro ao registrar novo nome! tente novamente!");
                         } while (erronome != 1);
                         int erropreco = 0;
                         do {
-                            printf("\nDigite o novo preço do produto (ou pressione 0 para não alterar): ");
+                            printf("\nDigite o novo preço do produto (ou -1 para não alterar): ");
                             float novoPreco;
                             erropreco = scanf("%f", &novoPreco);
+                            if (novoPreco == -1) break;
                             if (novoPreco > 0) produto.preco = novoPreco;
-                            if (erropreco != 1) printf("\nErro ao registrar novo preço! Digite novamente o preço em reais");
+                            if (erropreco != 1 || novoPreco < 0) printf("\nErro ao registrar novo preço! Digite novamente o preço em reais");
                         } while (erropreco != 1);
                         encontrado = 1;
                     }
@@ -127,12 +141,20 @@ void produtos() {
             }
             case 'X': {
                 FILE *produtos = fopen("produtos.txt", "r");
+                if (!produtos) {
+                    printf("\nErro ao abrir arquivo de produtos.");
+                    break;
+                }
                 int idAlvo;
                 printf("\nInforme o ID do produto a ser excluído:");
                 scanf("%d", &idAlvo);
                 struct Produto produto;
                 int encontrado = 0;
                 FILE *temp = fopen("temp.txt", "w");
+                if (!temp) {
+                    printf("\nErro ao abrir arquivo temporário.");
+                    break;
+                }
                 while (fscanf(produtos, "%d|%75[^|]|%f\n", &produto.id, produto.nome, &produto.preco) != EOF) {
                     if (produto.id == idAlvo) {
                         printf("\nDeseja mesmo exlcluir o produto %s? (S/N): ", produto.nome);
