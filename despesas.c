@@ -44,6 +44,7 @@ void despesas() {
         printf("\n(C) Criar tabela de despesas");
         printf("\n(V) Visualizar tabelas de despesas disponíveis");
         printf("\n(A) Apagar relatório de despesas");
+        printf("\n(D) Visualizar despesas detalhadas");
         printf("\n(S) Sair");
         printf("\nSua opção: ");
         scanf(" %c", &saida);
@@ -96,7 +97,7 @@ void despesas() {
                         }
                     } while (verificarvalor != 1);
                     if (numerodespesas < 30) {
-                        printf("\nDeseja adicionar nova despesa para este relatório? (S/N)");
+                        printf("\nDeseja adicionar nova despesa para este relatório? (S/N): ");
                         scanf(" %c", &continuacao);
                         continuacao = toupper(continuacao);
                     } else {
@@ -125,6 +126,7 @@ void despesas() {
                 FILE *listarelatorios = fopen("listarelatorios.txt", "a+");
                 fprintf(listarelatorios, "%d|%s|%s|%.2f\n", idatual, datainicial, datafinal, valortotal);
                 printf("\nRelatório salvo com sucesso!\nID: %d\nData inicial: %s\nData final: %s\nValor do relatório: R$%.2f", idatual, datainicial, datafinal, valortotal);
+                printf("\nID do relatório: %d", idatual);
                 fclose(listarelatorios);
                 system("pause");
                 break;
@@ -135,7 +137,7 @@ void despesas() {
                 FILE *relatorios = fopen("listarelatorios.txt", "r");
                 struct Relatorio relatorio;
                 printf("ID         Data Inicial          Data Final           Valor Total\n");
-                while (fscanf(relatorios, "%d|%s|%s|%f\n", &relatorio.id, relatorio.datainicial, relatorio.datafinal, &relatorio.valortotal) != EOF) {
+                while (fscanf(relatorios, "%d|%8[^|]||%8[^|]||%f\n", &relatorio.id, relatorio.datainicial, relatorio.datafinal, &relatorio.valortotal) != 4) {
                     printf("%d          %s          %s          R$%.2f\n", relatorio.id, relatorio.datainicial, relatorio.datafinal, relatorio.valortotal);
                 }
                 printf("\n\n\n\n");
@@ -163,7 +165,7 @@ void despesas() {
                 if (idencontrado == 0) {
                     printf("\nID não encontrado!");
                 } else {
-                    printf("\nTem certeza de que quer apagar o relatório de ID %d? (S/N)", idpraapagar);
+                    printf("\nTem certeza de que quer apagar o relatório de ID %d? (S/N): ", idpraapagar);
                     char apagar = 'N';
                     scanf(" %c", &apagar);
                     apagar = toupper(apagar);
@@ -193,6 +195,33 @@ void despesas() {
                 system("pause");
                 system("cls");
                 return;
+            }
+            case 'D': {
+                int idvalidado = 0;
+                int idprocurado;
+                do {
+                    printf("\nInsira o ID do relatório que deseja detalhar: ");
+                    idvalidado = scanf("%d", &idprocurado);
+                    if (idvalidado != 1) printf("\nID inválido!");
+                } while (idvalidado != 1);
+                char nomerelatorio[21];
+                sprintf(nomerelatorio, "relatorios/%d.txt", idprocurado);
+                FILE *relatorioprocurado = fopen(nomerelatorio, "r");
+                if (!relatorioprocurado) {
+                    printf("\nRelatório não encontrado.");
+                    break;
+                } else {
+                    printf("\nRelatório do id %d:\n\n", idprocurado);
+                    printf("Despesa                     valor");
+                    struct Despesa despesa;
+                    while (fscanf(relatorioprocurado, "%s[^|]|%f\n", despesa.nomedespesa, &despesa.valor) != EOF) {
+                        char itemlistadespesa[76];
+                        strcpy(itemlistadespesa, strtok(despesa.nomedespesa, "|"));
+                        printf("\n%s                  R$%.2f", itemlistadespesa, despesa.valor);
+                    }
+                    printf("\n");
+                    system("pause");
+                }
             }
             default: {
                 printf("\nEntrada inválida! Tente novamente!\n");

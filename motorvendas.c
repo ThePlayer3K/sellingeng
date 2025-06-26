@@ -74,7 +74,7 @@ void motorVendas() {
                 float precovenda;
                 int erroproduto = 0;
                 do {
-                    printf("\nInsira o produto a ser vendido: ");
+                    printf("\nInsira o ID do produto a ser vendido: ");
                     erroproduto = scanf("%d", &idproduto);
                     if (erroproduto != 1) {
                         printf("\nErro ao registar ID de produto. Tente novamente\n");
@@ -147,8 +147,9 @@ void motorVendas() {
                 printf("\n($) Dinheiro");
                 printf("\n(C) Crédito");
                 printf("\n(D) Débito");
-                printf("\n(A) Vale-Alimentação\n");
-                printf("\n(P) Pix");
+                printf("\n(A) Vale-Alimentação");
+                printf("\n(P) Pix\n");
+                printf("\nSua resposta: ");
                 scanf(" %c", &metododavenda);
                 metododavenda = toupper(metododavenda);
                 pagamentovalido = 0;

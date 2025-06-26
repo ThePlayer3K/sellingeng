@@ -204,7 +204,7 @@ void Visualizar() {
                 float totalbruto = valordinheiro + valoralimentacao + valorcredito + valordebito + valorpix;
                 float totalliquido = valordinheiro + valoralimentacao + creditoliquido + debitoliquido + pixliquido;
                 printf("\nValor bruto total: R$%.2f", totalbruto);
-                printf("\nValor líquido total: R$.%2f", totalliquido);
+                printf("\nValor líquido total: R$%.2f", totalliquido);
                 system("pause");
                 break;
             }

@@ -111,9 +111,8 @@ void produtos() {
                             char novoNome[76];
                             erronome = scanf( " %75[^\n]", novoNome);
                             erropipe = verificarPipe(novoNome);
-                            if (strcmp(novoNome, "-1") != 0) break;
+                            if (erronome != 1 || erropipe != 0 || strlen(novoNome) <= 0) printf("\nErro ao registrar novo nome! tente novamente!");
                             if (strlen(novoNome) > 0 && strcmp(novoNome, "-1") != 0) strcpy(produto.nome, novoNome);
-                            if (erronome != 1 || erropipe != 0) printf("\nErro ao registrar novo nome! tente novamente!");
                         } while (erronome != 1);
                         int erropreco = 0;
                         do {
@@ -146,7 +145,7 @@ void produtos() {
                     break;
                 }
                 int idAlvo;
-                printf("\nInforme o ID do produto a ser excluído:");
+                printf("\nInforme o ID do produto a ser excluído: ");
                 scanf("%d", &idAlvo);
                 struct Produto produto;
                 int encontrado = 0;
