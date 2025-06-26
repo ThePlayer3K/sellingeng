@@ -1,0 +1,3 @@
+1|Sorvete de Chocolate|3.00
+2|Sorvete de Baunilha|2.00
+3|Sorvete de Morango|3.00

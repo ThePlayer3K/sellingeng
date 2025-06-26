@@ -36,9 +36,10 @@ int main(void){
                 system("cls");
                 break;
             case 'V':
-                despesas();
+                Visualizar();
                 break;
             case 'D':
+                despesas();
                 break;
             case 'S':
                 printf("\nVocê tem certeza que quer sair? (S/N) ");

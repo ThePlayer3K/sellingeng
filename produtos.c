@@ -78,7 +78,7 @@ void produtos() {
             case 'L': {
                 FILE *produtos = fopen("produtos.txt", "r");
                 struct Produto produto;
-                printf("\nLista de produtos");
+                printf("\nLista de produtos:\n");
                 while (fscanf(produtos, "%d|%75[^|]|%f\n", &produto.id, produto.nome, &produto.preco) != EOF) {
                     printf("ID: %d, nome: %s, preço: %.2f\n", produto.id, produto.nome, produto.preco);
                 }
