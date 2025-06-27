@@ -137,7 +137,7 @@ void despesas() {
                 FILE *relatorios = fopen("listarelatorios.txt", "r");
                 struct Relatorio relatorio;
                 printf("ID         Data Inicial          Data Final           Valor Total\n");
-                while (fscanf(relatorios, "%d|%8[^|]||%8[^|]||%f\n", &relatorio.id, relatorio.datainicial, relatorio.datafinal, &relatorio.valortotal) != 4) {
+                while (fscanf(relatorios, "%d|%8[^|]|%8[^|]|%f\n", &relatorio.id, relatorio.datainicial, relatorio.datafinal, &relatorio.valortotal) == 4) {
                     printf("%d          %s          %s          R$%.2f\n", relatorio.id, relatorio.datainicial, relatorio.datafinal, relatorio.valortotal);
                 }
                 printf("\n\n\n\n");
@@ -214,10 +214,8 @@ void despesas() {
                     printf("\nRelatório do id %d:\n\n", idprocurado);
                     printf("Despesa                     valor");
                     struct Despesa despesa;
-                    while (fscanf(relatorioprocurado, "%s[^|]|%f\n", despesa.nomedespesa, &despesa.valor) != EOF) {
-                        char itemlistadespesa[76];
-                        strcpy(itemlistadespesa, strtok(despesa.nomedespesa, "|"));
-                        printf("\n%s                  R$%.2f", itemlistadespesa, despesa.valor);
+                    while (fscanf(relatorioprocurado, "%75[^|]|%f\n", despesa.nomedespesa, &despesa.valor) != EOF) {
+                        printf("\n%s                  R$%.2f", despesa.nomedespesa, despesa.valor);
                     }
                     printf("\n");
                     system("pause");
