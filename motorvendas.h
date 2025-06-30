@@ -1,5 +1,5 @@
-#ifndef MOTORVENDAS_H
-#define MOTORVENDAS_H
+#ifndef MOTORVENDAS_H_INCLUDED
+#define MOTORVENDAS_H_INCLUDED
 
 float encontrarPreco(int id);
 void motorVendas();

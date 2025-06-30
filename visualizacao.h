@@ -1,5 +1,5 @@
-#ifndef VISUALIZACAO_H
-#define VISUALIZACAO_H
+#ifndef VISUALIZACAO_H_INCLUDED
+#define VISUALIZACAO_H_INCLUDED
 
 void Visualizar();
 int lerDia();
