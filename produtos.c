@@ -27,7 +27,6 @@ int verificarPipe(char str[]) {
 }
 
 void produtos() {
-    setlocale(LC_ALL, "Portuguese");
     char saidaprod = 'n';
     do {
         system("cls");

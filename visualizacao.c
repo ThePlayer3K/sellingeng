@@ -99,8 +99,6 @@ char *procurarNomeProduto(int id) {
 
 void Visualizar() {
     char saida = 'A';
-    setlocale(LC_ALL, "Portuguese");
-    system("chcp 1252 > nul");
     int verificarcarregamento = carregarProdutos();
     do {
         system("cls");
