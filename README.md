@@ -3,6 +3,8 @@
 #### Description:
 This project is meant to represent a basic selling and spending manager for local stores, built in a CLI interface in C. It includes features such as product registration, sales engine (daily sale registering), sales visualizer (visualizing sales for one or mutiple days) and and expendings manager, with listings dated by the user. All piece of this software contains input validation to avoid bugs and is EXCLUSIVELY COMPATIBLE WITH MICROSOFT WINDOWS.
 
+Observation: the project was initially made in Brazilian Portuguese.
+
 1) The Main Menu
 The main menu is simply what you see at launch and allow access to the program's functions, doing nothing by itself. The other files contain the de facto purposes of the software.
 2) The Product Registerer
