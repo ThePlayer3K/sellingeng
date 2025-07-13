@@ -48,7 +48,7 @@ void motorVendas() {
     char resposta;
     scanf(" %c", &resposta);
     resposta = toupper(resposta);
-    if (resposta != 'S') {
+    if (resposta != 'Y') {
         return;
     }
     printf("\nCurrent date: %s\nStarting sales engine\n", buffer);
@@ -67,7 +67,7 @@ void motorVendas() {
         if (toupper(saida) != 'N') {
             int contadorvetor = 0;
             struct ItemDaVenda venda[30];
-            char continuarvenda = 'S';
+            char continuarvenda = 'Y';
             do {
                 int idproduto, quantidade;
                 float precovenda;
