@@ -190,21 +190,21 @@ void Visualizar() {
                     printf("\n%s x%d", produtoatual, quantidadeprod);
                 }
 
-                printf("\n\n\nCash value: R$%.2f", valordinheiro);
-                printf("\nFood voucher value: R$%.2f", valoralimentacao);
-                printf("\nGross credit value: R$%.2f", valorcredito);
-                printf("\nGross debit value: R$%.2f", valordebito);
-                printf("\nGross Pix value: R$%.2f", valorpix);
+                printf("\n\n\nCash value: $%.2f", valordinheiro);
+                printf("\nFood voucher value: $%.2f", valoralimentacao);
+                printf("\nGross credit value: $%.2f", valorcredito);
+                printf("\nGross debit value: $%.2f", valordebito);
+                printf("\nGross Pix value: $%.2f", valorpix);
                 float creditoliquido = valorcredito * 0.97;
                 float debitoliquido = valordebito * 0.98;
                 float pixliquido = valorpix * 0.995;
-                printf("\nNet credit value: R$%.2f", creditoliquido);
-                printf("\nNet debit value: R$%.2f", debitoliquido);
-                printf("\nNet Pix value: R$%.2f", pixliquido);
+                printf("\nNet credit value: $%.2f", creditoliquido);
+                printf("\nNet debit value: $%.2f", debitoliquido);
+                printf("\nNet Pix value: $%.2f", pixliquido);
                 float totalbruto = valordinheiro + valoralimentacao + valorcredito + valordebito + valorpix;
                 float totalliquido = valordinheiro + valoralimentacao + creditoliquido + debitoliquido + pixliquido;
-                printf("\nTotal gross value: R$%.2f", totalbruto);
-                printf("\nTotal net value: R$%.2f", totalliquido);
+                printf("\nTotal gross value: $%.2f", totalbruto);
+                printf("\nTotal net value: $%.2f", totalliquido);
                 system("pause");
                 break;
             }
@@ -283,20 +283,20 @@ void Visualizar() {
                     data_atual = *localtime(&segatual);
                     if (strcmp(stringdataatual, stringdatafinal) == 0) killswitch = 1;
                 }
-                printf("\nTotal cash value: R$%.2f", valordinheirototal);
-                printf("\nTotal food voucher value: R$%.2f", valoralimentacaototal);
-                printf("\nGross credit value: R$%.2f", valorcreditototal);
-                printf("\nGross debit value: R$%.2f", valordebitototal);
-                printf("\nGross Pix value: R$%.2f", valorpixtotal);
+                printf("\nTotal cash value: $%.2f", valordinheirototal);
+                printf("\nTotal food voucher value: $%.2f", valoralimentacaototal);
+                printf("\nGross credit value: $%.2f", valorcreditototal);
+                printf("\nGross debit value: $%.2f", valordebitototal);
+                printf("\nGross Pix value: $%.2f", valorpixtotal);
                 float creditoliquidototal = valorcreditototal * 0.97;
                 float debitoliquidototal = valordebitototal * 0.98;
                 float pixliquidototal = valorpixtotal * 0.995;
-                printf("\nNet credit value: R$%.2f", creditoliquidototal);
-                printf("\nNet Pix value: R$%.2f", pixliquidototal);
+                printf("\nNet credit value: $%.2f", creditoliquidototal);
+                printf("\nNet Pix value: $%.2f", pixliquidototal);
                 float valorbrutototal = valordinheirototal + valoralimentacaototal + valorcreditototal + valordebitototal + valorpixtotal;
                 float valorliquidototal = valordinheirototal + valoralimentacaototal + creditoliquidototal + debitoliquidototal + pixliquidototal;
-                printf("\nTotal gross value: R$%.2f", valorbrutototal);
-                printf("\nTotal net value: R$%.2f", valorliquidototal);
+                printf("\nTotal gross value: $%.2f", valorbrutototal);
+                printf("\nTotal net value: $%.2f", valorliquidototal);
                 if (arquivosfalhos > 0) {
                     printf("\n\n%d days were not processed due to errors. Either the files do not exist, or some circumstance prevented reading.", arquivosfalhos);
                 }

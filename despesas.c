@@ -123,7 +123,7 @@ void despesas() {
                 fclose(arquivorelatorio);
                 FILE *listarelatorios = fopen("listarelatorios.txt", "a+");
                 fprintf(listarelatorios, "%d|%s|%s|%.2f\n", idatual, datainicial, datafinal, valortotal);
-                printf("\nReport saved successfully!\nID: %d\nInitial date: %s\nFinal date: %s\nReport value: R$%.2f", idatual, datainicial, datafinal, valortotal);
+                printf("\nReport saved successfully!\nID: %d\nInitial date: %s\nFinal date: %s\nReport value: $%.2f", idatual, datainicial, datafinal, valortotal);
                 printf("\nReport ID: %d", idatual);
                 fclose(listarelatorios);
                 system("pause");
@@ -136,7 +136,7 @@ void despesas() {
                 struct Relatorio relatorio;
                 printf("ID         Initial Date          Final Date           Total Value\n");
                 while (fscanf(relatorios, "%d|%8[^|]|%8[^|]|%f\n", &relatorio.id, relatorio.datainicial, relatorio.datafinal, &relatorio.valortotal) == 4) {
-                    printf("%d          %s          %s          R$%.2f\n", relatorio.id, relatorio.datainicial, relatorio.datafinal, relatorio.valortotal);
+                    printf("%d          %s          %s          $%.2f\n", relatorio.id, relatorio.datainicial, relatorio.datafinal, relatorio.valortotal);
                 }
                 printf("\n\n\n\n");
                 system("pause");
@@ -213,7 +213,7 @@ void despesas() {
                 printf("Expense                     Value");
                 struct Despesa despesa;
                 while (fscanf(relatorioprocurado, "%75[^|]|%f\n", despesa.nomedespesa, &despesa.valor) != EOF) {
-                    printf("\n%s                  R$%.2f", despesa.nomedespesa, despesa.valor);
+                    printf("\n%s                  $%.2f", despesa.nomedespesa, despesa.valor);
                 }
                 printf("\n");
                 system("pause");
