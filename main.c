@@ -12,18 +12,16 @@
 
 
 int main(void){
-    setlocale(LC_ALL, "Portuguese");
-    system("chcp 1252 > nul");
     char saida = 'n';
     do {
         char opcao;
-        printf("\nOlá! Selecione uma opção abaixo digitando uma letra para continuar");
-        printf("\n(P) Cadastrar, atualizar ou remover produto");
-        printf("\n(I) Iniciar dia de vendas");
-        printf("\n(V) Visualizar dia de vendas anterior");
-        printf("\n(D) Gerenciar despesas periódicas");
-        printf("\n(S) Sair");
-        printf("\nSua opção: ");
+        printf("\nHello! Select an option below by typing a letter to continue");
+        printf("\n(P) Register, update or remove product");
+        printf("\n(I) Start sales day");
+        printf("\n(V) View previous sales day");
+        printf("\n(D) Manage periodic expenses");
+        printf("\n(S) Exit");
+        printf("\nYour option: ");
         scanf(" %c", &opcao);
         opcao = toupper(opcao);
         switch(opcao) {
@@ -42,12 +40,12 @@ int main(void){
                 despesas();
                 break;
             case 'S':
-                printf("\nVocê tem certeza que quer sair? (S/N) ");
+                printf("\nAre you sure you want to exit? (Y/N) ");
                 scanf(" %c", &saida);
                 break;
             default:
                 system("cls");
-                printf("\nOpção inválida, tente novamente");
+                printf("\nInvalid option, try again");
         }
 
     } while (saida != 'S'&& saida != 's');

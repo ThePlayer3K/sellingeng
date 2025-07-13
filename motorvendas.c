@@ -44,26 +44,25 @@ void motorVendas() {
     timeinfo = localtime(&rawtime);
     strftime(buffer, sizeof(buffer), "%d/%m/%Y", timeinfo);
 
-    setlocale(LC_ALL, "Portuguese");
-    printf("\nTem certeza de que quer iniciar o motor de vendas? (S/N): ");
+    printf("\nAre you sure you want to start the sales engine? (Y/N): ");
     char resposta;
     scanf(" %c", &resposta);
     resposta = toupper(resposta);
     if (resposta != 'S') {
         return;
     }
-    printf("\nData atual: %s\nIniciando motor de vendas\n", buffer);
+    printf("\nCurrent date: %s\nStarting sales engine\n", buffer);
     strftime(buffer, sizeof(buffer), "%d%m%Y", timeinfo);
     strcat(buffer, ".txt");
     FILE *relatoriovendas = fopen(buffer, "a+");
     if (relatoriovendas == NULL) {
-        printf("Erro ao abrir arquivo de relatório!\n");
+        printf("Error opening report file!\n");
         return;
     }
     
     char saida = 'n';
     do {
-        printf("\nDeseja iniciar uma nova venda? (S/N): ");
+        printf("\nDo you want to start a new sale? (Y/N): ");
         scanf(" %c", &saida);
         if (toupper(saida) != 'N') {
             int contadorvetor = 0;
@@ -74,19 +73,18 @@ void motorVendas() {
                 float precovenda;
                 int erroproduto = 0;
                 do {
-                    printf("\nInsira o ID do produto a ser vendido: ");
+                    printf("\nEnter the ID of the product to be sold: ");
                     erroproduto = scanf("%d", &idproduto);
                     if (erroproduto != 1) {
-                        printf("\nErro ao registar ID de produto. Tente novamente\n");
+                        printf("\nError registering product ID. Try again\n");
                         while(getchar() != '\n');
                     } else {
                         FILE *produtos = fopen("produtos.txt", "r");
                         if (produtos == NULL) {
-                            printf("\nErro ao abrir arquivo de produtos!\n");
+                            printf("\nError opening products file!\n");
                             erroproduto = 0;
                             continue;
                         }
-                        
                         struct Produto produto;
                         char nomeproduto[76] = "";
                         int produtoEncontrado = 0;
@@ -98,36 +96,32 @@ void motorVendas() {
                             }
                         }
                         fclose(produtos);
-                        
                         if (!produtoEncontrado) {
-                            printf("\nProduto não encontrado!\n");
+                            printf("\nProduct not found!\n");
                             erroproduto = 0;
                             continue;
                         }
-                        
-                        printf("\nO produto %s está correto? (S/N): ", nomeproduto);
+                        printf("\nIs the product %s correct? (Y/N): ", nomeproduto);
                         char verificarproduto;
                         scanf(" %c", &verificarproduto);
-                        if (toupper(verificarproduto) != 'S') {
-                            printf("\nProduto cancelado\n");
+                        if (toupper(verificarproduto) != 'Y') {
+                            printf("\nProduct cancelled\n");
                             erroproduto = 0;
                         }
                     }
                 } while (erroproduto != 1);
-                
                 int verificarquantidade = 0;
                 do {
-                    printf("\nQuantos deste produto serão vendidos? ");
+                    printf("\nHow many of this product will be sold? ");
                     verificarquantidade = scanf("%d", &quantidade);
                     if (verificarquantidade != 1 || quantidade < 0) {
                         verificarquantidade = 0;
-                        printf("\nQuantidade inválida. Tente novamente.");
+                        printf("\nInvalid quantity. Try again.");
                     }
                 } while (verificarquantidade != 1);
                 precovenda = quantidade * encontrarPreco(idproduto);
-                
                 if (contadorvetor >= 30) {
-                    printf("\nLimite de itens por venda excedido!\n");
+                    printf("\nItem limit per sale exceeded!\n");
                     break;
                 } else {
                     venda[contadorvetor].id = idproduto;
@@ -135,21 +129,20 @@ void motorVendas() {
                     venda[contadorvetor].preco = precovenda;
                     contadorvetor++;
                 }
-                
-                printf("\nDeseja continuar a venda? (S/N): ");
+                printf("\nDo you want to continue the sale? (Y/N): ");
                 scanf(" %c", &continuarvenda);
             } while (toupper(continuarvenda) != 'N');
             
             char metododavenda;
             int pagamentovalido = 0;
             do {
-                printf("\nSelecione um meio de pagamento usando um caractere: ");
-                printf("\n($) Dinheiro");
-                printf("\n(C) Crédito");
-                printf("\n(D) Débito");
-                printf("\n(A) Vale-Alimentação");
+                printf("\nSelect a payment method using a character: ");
+                printf("\n($) Cash");
+                printf("\n(C) Credit");
+                printf("\n(D) Debit");
+                printf("\n(A) Food Voucher");
                 printf("\n(P) Pix\n");
-                printf("\nSua resposta: ");
+                printf("\nYour answer: ");
                 scanf(" %c", &metododavenda);
                 metododavenda = toupper(metododavenda);
                 pagamentovalido = 0;
@@ -160,33 +153,33 @@ void motorVendas() {
                     }
                 }
                 if (pagamentovalido != 1) {
-                    printf("\nErro ao obter método de pagamento, tente novamente!\n");
+                    printf("\nError getting payment method, try again!\n");
                     continue;
                 } else {
-                    printf("\nVocê tem certeza do método de pagamento? (S/N): ");
+                    printf("\nAre you sure about the payment method? (Y/N): ");
                     char confirmacaometodo;
                     scanf(" %c", &confirmacaometodo);
-                    if (toupper(confirmacaometodo) != 'S') pagamentovalido = 0;
+                    if (toupper(confirmacaometodo) != 'Y') pagamentovalido = 0;
                 }
             } while (pagamentovalido != 1);
             
             for (int i = 0; i < contadorvetor; i++) {
                 fprintf(relatoriovendas, "%d|%d|%.2f|%c\n", venda[i].id, venda[i].quantidade, venda[i].preco, metododavenda);
             }
-            printf("\nVenda registrada com sucesso!\n");
+            printf("\nSale registered successfully!\n");
             system("pause");
             system("cls");   
         } else {
-            printf("\nTem certeza que quer finalizar o dia de vendas? (S/N)? ");
+            printf("\nAre you sure you want to end the sales day? (Y/N)? ");
             char confirmarsaida;
             scanf(" %c", &confirmarsaida);
             confirmarsaida = toupper(confirmarsaida);
-            if (confirmarsaida != 'S') saida = 'N';
+            if (confirmarsaida != 'Y') saida = 'N';
         }
     } while (toupper(saida) != 'N');
     
     fclose(relatoriovendas);
-    printf("\nDia de vendas finalizado com sucesso! Você pode utilizar a função de visualizar relatórios de vendas diárias\n");
+    printf("\nSales day successfully ended! You can use the function to view daily sales reports\n");
     system("pause");
     system("cls");
 }

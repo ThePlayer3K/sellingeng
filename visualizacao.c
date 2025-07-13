@@ -29,7 +29,7 @@ int numprodutos = 0;
 int carregarProdutos() {
     FILE *listaprodutos = fopen("produtos.txt", "r");
     if (!listaprodutos) {
-        printf("\nErro ao abrir produtos.txt");
+        printf("\nError opening produtos.txt");
         return 1;
     }
     struct Produto produto;
@@ -43,7 +43,7 @@ int lerDia() {
     do {
         scanf("%d", &n);
         if (n < 1 || n > 31) {
-            printf("\nDia inválido: tente novamente: ");
+            printf("\nInvalid day: try again: ");
         } 
     } while (n < 1 || n > 31);
     return n;
@@ -54,7 +54,7 @@ int lerMes() {
     do {
         scanf("%d", &n);
         if (n < 1 || n > 12) {
-            printf("\nMês inválido: tente novamente: ");
+            printf("\nInvalid month: try again: ");
         } 
     } while (n < 1 || n > 12);
     return n;
@@ -65,7 +65,7 @@ int lerAno() {
     do {
         scanf("%d", &n);
         if (n > 9999) {
-            printf("\nAno inválido: tente novamente: ");
+            printf("\nInvalid year: try again: ");
         } 
     } while (n > 9999);
     return n;
@@ -102,33 +102,33 @@ void Visualizar() {
     int verificarcarregamento = carregarProdutos();
     do {
         system("cls");
-        printf("\nBem-vindo ao visualizador de vendas! Escolha as funções disponíveis");
-        printf("\n(U) Visualizar dia único");
-        printf("\n(M) Visualizar múltiplos dias de vendas (valores apenas)");
-        printf("\n(S) Sair");
-        printf("\nSua opção: ");
+        printf("\nWelcome to the sales viewer! Choose the available functions");
+        printf("\n(U) View single day");
+        printf("\n(M) View multiple sales days (values only)");
+        printf("\n(S) Exit");
+        printf("\nYour option: ");
         scanf(" %c", &saida);
         saida = toupper(saida);
         switch(saida) {
             case 'U': {
                 if (verificarcarregamento != 0) {
-                    printf("\nErro ao carregar produtos! Não será possível usar esta função agora.\nReinicie o programa ou crie um produto e tente novamente.");
+                    printf("\nError loading products! It will not be possible to use this function now.\nRestart the program or create a product and try again.");
                     return;
                 }
                 char data[13];
                 int erroscan = 0, arquivoencontrado = 1;
                 do {
-                    printf("\nInsira a data do arquivo mencionado (DDMMAAAA, tudo junto): ");
+                    printf("\nEnter the date of the mentioned file (DDMMYYYY, all together): ");
                     erroscan = scanf(" %8[^\n]", data);
                     if (erroscan != 1) {
-                        printf("\nErro ao ler data! ");
+                        printf("\nError reading date! ");
                         system("pause");
                         continue;
                     }
                     strcat(data, ".txt");
                     int verificararquivo = procurarArquivo(data);
                     if (verificararquivo == 1)  {
-                        printf("\nArquivo com esta data não encontrado");
+                        printf("\nFile with this date not found");
                         continue;
                     } else {
                         arquivoencontrado = 0;
@@ -136,7 +136,7 @@ void Visualizar() {
                 } while (erroscan != 1 || arquivoencontrado != 0);
                 FILE *relatorio = fopen(data, "a+");
                 if (!relatorio) {
-                    printf("\nErro ao abrir arquivo.");
+                    printf("\nError opening file.");
                     break;
                 }
                 struct Linharelatorio linha;
@@ -165,7 +165,7 @@ void Visualizar() {
                             valoralimentacao += linha.preco;
                             break;
                         default:
-                            printf("\nErro ao ler método de pagamento.");
+                            printf("\nError reading payment method.");
                     }
                     int encontrado = 0;
                     for (int i = 0; i < contadorprodutos; i++) {
@@ -190,39 +190,39 @@ void Visualizar() {
                     printf("\n%s x%d", produtoatual, quantidadeprod);
                 }
 
-                printf("\n\n\nValor em dinheiro: R$%.2f", valordinheiro);
-                printf("\nValor vale-alimentação: R$%.2f", valoralimentacao);
-                printf("\nValor crédito bruto: R$%.2f", valorcredito);
-                printf("\nValor débito bruto: R$%.2f", valordebito);
-                printf("\nValor Pix bruto: R$%.2f", valorpix);
+                printf("\n\n\nCash value: R$%.2f", valordinheiro);
+                printf("\nFood voucher value: R$%.2f", valoralimentacao);
+                printf("\nGross credit value: R$%.2f", valorcredito);
+                printf("\nGross debit value: R$%.2f", valordebito);
+                printf("\nGross Pix value: R$%.2f", valorpix);
                 float creditoliquido = valorcredito * 0.97;
                 float debitoliquido = valordebito * 0.98;
                 float pixliquido = valorpix * 0.995;
-                printf("\nValor crédito líquido: R$%.2f", creditoliquido);
-                printf("\nValor débito líquido: R$%.2f", debitoliquido);
-                printf("\nValor Pix líquido: R$%.2f", pixliquido);
+                printf("\nNet credit value: R$%.2f", creditoliquido);
+                printf("\nNet debit value: R$%.2f", debitoliquido);
+                printf("\nNet Pix value: R$%.2f", pixliquido);
                 float totalbruto = valordinheiro + valoralimentacao + valorcredito + valordebito + valorpix;
                 float totalliquido = valordinheiro + valoralimentacao + creditoliquido + debitoliquido + pixliquido;
-                printf("\nValor bruto total: R$%.2f", totalbruto);
-                printf("\nValor líquido total: R$%.2f", totalliquido);
+                printf("\nTotal gross value: R$%.2f", totalbruto);
+                printf("\nTotal net value: R$%.2f", totalliquido);
                 system("pause");
                 break;
             }
             case 'M': {
                 int diaI, mesI, anoI;
                 int diaF, mesF, anoF;
-                printf("\nTenha em mente as datas (dia, mês, ano) inicial e final do período que quer compreender as entradas do mês.");
-                printf("\nInsira o dia inicial: ");
+                printf("\nKeep in mind the initial and final dates (day, month, year) of the period you want to analyze.");
+                printf("\nEnter the initial day: ");
                 diaI = lerDia();
-                printf("\nInsira o mês inicial: ");
+                printf("\nEnter the initial month: ");
                 mesI = lerMes();
-                printf("\nInsira o ano inicial: ");
+                printf("\nEnter the initial year: ");
                 anoI = lerAno();
-                printf("\nInsira o dia final: ");
+                printf("\nEnter the final day: ");
                 diaF = lerDia();
-                printf("\nInsira o mês final: ");
+                printf("\nEnter the final month: ");
                 mesF = lerMes();
-                printf("\nInsira o ano final: ");
+                printf("\nEnter the final year: ");
                 anoF = lerAno();
                 struct tm data_atual = {0};
                 struct tm data_final = {0};
@@ -283,22 +283,22 @@ void Visualizar() {
                     data_atual = *localtime(&segatual);
                     if (strcmp(stringdataatual, stringdatafinal) == 0) killswitch = 1;
                 }
-                printf("\nValor em dinheiro total: R$%.2f", valordinheirototal);
-                printf("\nValor em vale-alimentação total: R$%.2f", valoralimentacaototal);
-                printf("\nValor crédito bruto: R$%.2f", valorcreditototal);
-                printf("\nValor débito bruto: R$%.2f", valordebitototal);
-                printf("\nValor Pix bruto: R$%.2f", valorpixtotal);
+                printf("\nTotal cash value: R$%.2f", valordinheirototal);
+                printf("\nTotal food voucher value: R$%.2f", valoralimentacaototal);
+                printf("\nGross credit value: R$%.2f", valorcreditototal);
+                printf("\nGross debit value: R$%.2f", valordebitototal);
+                printf("\nGross Pix value: R$%.2f", valorpixtotal);
                 float creditoliquidototal = valorcreditototal * 0.97;
                 float debitoliquidototal = valordebitototal * 0.98;
                 float pixliquidototal = valorpixtotal * 0.995;
-                printf("\nValor crédito líquido: R$%.2f", creditoliquidototal);
-                printf("\nValor Pix líquido: R$%.2f", pixliquidototal);
+                printf("\nNet credit value: R$%.2f", creditoliquidototal);
+                printf("\nNet Pix value: R$%.2f", pixliquidototal);
                 float valorbrutototal = valordinheirototal + valoralimentacaototal + valorcreditototal + valordebitototal + valorpixtotal;
                 float valorliquidototal = valordinheirototal + valoralimentacaototal + creditoliquidototal + debitoliquidototal + pixliquidototal;
-                printf("\nValor bruto total: R$%.2f", valorbrutototal);
-                printf("\nValor líquido total: R$%.2f", valorliquidototal);
+                printf("\nTotal gross value: R$%.2f", valorbrutototal);
+                printf("\nTotal net value: R$%.2f", valorliquidototal);
                 if (arquivosfalhos > 0) {
-                    printf("\n\n%d dias não foram processados devido a erros. Ou os arquivos não existem, ou alguma circustância impediu a leitura.", arquivosfalhos);
+                    printf("\n\n%d days were not processed due to errors. Either the files do not exist, or some circumstance prevented reading.", arquivosfalhos);
                 }
                 system("pause");
                 break;
@@ -308,7 +308,7 @@ void Visualizar() {
                 break;
             }
             default: {
-                printf("\nOpção inválida, tente novamente.");
+                printf("\nInvalid option, try again.");
                 system("pause");
             }
         }
