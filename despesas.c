@@ -41,7 +41,7 @@ void despesas() {
         printf("\nSelect an option to manage your expenses: ");
         printf("\n(C) Create expense table");
         printf("\n(V) View available expense tables");
-        printf("\n(A) Delete expense report");
+        printf("\n(A) Delete expense table");
         printf("\n(D) View detailed expenses");
         printf("\n(S) Exit");
         printf("\nYour option: ");
