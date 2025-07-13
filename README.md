@@ -1,5 +1,5 @@
 # SALES MANAGER
-#### Video Demo:
+#### Video Demo: https://youtu.be/IJDBW7gLrR4
 #### Description:
 This project is meant to represent a basic selling and spending manager for local stores, built in a CLI interface in C. It includes features such as product registration, sales engine (daily sale registering), sales visualizer (visualizing sales for one or mutiple days) and and expendings manager, with listings dated by the user. All piece of this software contains input validation to avoid bugs and is EXCLUSIVELY COMPATIBLE WITH MICROSOFT WINDOWS.
 
